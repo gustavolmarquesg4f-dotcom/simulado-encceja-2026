@@ -509,9 +509,11 @@
     border-radius: 12px;
     padding: 4px;
     margin-bottom: 24px;
+    overflow-x: auto;
   }
   .tab {
     flex: 1;
+    min-width: 105px;
     padding: 8px 12px;
     border-radius: 8px;
     border: none;
@@ -617,15 +619,152 @@
   }
   .rev-tabela-row:nth-child(even):not(.rev-tabela-head) { background: #fafbfe; }
 
+  /* VERSÃO RETA FINAL */
+  .top-actions {
+    position: fixed; top: 16px; right: 16px; z-index: 200;
+    display: flex; gap: 8px;
+  }
+  .icon-action {
+    width: 42px; height: 42px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); cursor: pointer; font-size: 18px;
+    box-shadow: 0 8px 24px rgba(30,33,48,.08);
+  }
+  .reta-final-banner {
+    width: 100%; max-width: 760px; margin: 0 auto 22px;
+    padding: 14px 18px; border-radius: 14px;
+    color: #fff; background: linear-gradient(135deg, #5a52e0, #8b5cf6);
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    box-shadow: 0 14px 32px rgba(90,82,224,.22);
+  }
+  .reta-final-banner strong { display:block; font-size:14px; margin-bottom:3px; }
+  .reta-final-banner span { font-size:12px; opacity:.9; line-height:1.45; }
+  .continue-card {
+    width:100%; max-width:760px; margin:0 auto 20px; padding:18px;
+    border:1px solid rgba(108,99,255,.35); border-radius:16px;
+    background:linear-gradient(135deg, rgba(108,99,255,.12), var(--surface));
+    display:none; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .continue-card.visivel { display:flex; }
+  .continue-info strong { display:block; font-size:14px; margin-bottom:5px; }
+  .continue-info span { font-size:12px; color:var(--muted); }
+  .home-section { width:100%; max-width:760px; margin:24px auto 0; }
+  .home-title { font-size:12px; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+  .modo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .modo-card {
+    border:1px solid var(--border); border-radius:15px; padding:17px;
+    background:var(--surface); cursor:pointer; text-align:left; color:var(--text);
+    transition:transform .2s,border-color .2s,box-shadow .2s;
+  }
+  .modo-card:hover { transform:translateY(-2px); border-color:var(--accent); box-shadow:0 10px 28px rgba(30,33,48,.08); }
+  .modo-card .modo-icon { font-size:23px; margin-bottom:9px; }
+  .modo-card strong { display:block; font-size:13px; margin-bottom:4px; }
+  .modo-card span { display:block; color:var(--muted); font-size:11px; line-height:1.45; }
+  .dashboard-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .dash-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:15px; }
+  .dash-card span { display:block; font-size:10px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:6px; }
+  .dash-card strong { font-size:21px; }
+  .plano-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; }
+  .plano-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:14px; }
+  .plano-head strong { font-size:15px; }
+  .plano-head span { font-size:11px; color:var(--muted); }
+  .plano-item { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-top:1px solid var(--border); font-size:12px; line-height:1.5; }
+  .plano-item input { margin-top:2px; accent-color:var(--accent); width:16px; height:16px; }
+  .plano-item.concluido label { color:var(--muted); text-decoration:line-through; }
+  .save-status { font-size:10px; color:var(--muted); white-space:nowrap; }
+  .topic-row { margin-bottom:14px; }
+  .topic-head { display:flex; justify-content:space-between; gap:10px; font-size:12px; margin-bottom:5px; }
+  .erros-lista { display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+  .erro-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .erro-item summary { cursor:pointer; padding:13px 15px; font-size:12px; font-weight:700; }
+  .erro-corpo { padding:0 15px 15px; font-size:12px; line-height:1.65; color:var(--muted); }
+  .erro-corpo strong { color:var(--text); }
+  .result-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:28px; }
+  .result-actions .btn-main,.result-actions .btn-sec { margin-top:0; }
+  .focus-box { background:linear-gradient(135deg,rgba(245,158,11,.13),var(--surface)); border:1px solid rgba(245,158,11,.35); border-radius:14px; padding:17px; margin-top:20px; font-size:12px; line-height:1.65; }
+  .focus-box strong { color:var(--text); }
+  .treino-redacao-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; }
+  .redacao-tools { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .redacao-timer { font-size:20px; font-weight:800; color:var(--accent2); font-variant-numeric:tabular-nums; }
+  .editor-redacao {
+    width:100%; min-height:430px; resize:vertical; border:1px solid var(--border);
+    border-radius:12px; padding:18px 18px 18px 52px; color:var(--text);
+    font-family:'Merriweather',serif; font-size:14px; line-height:30px;
+    background-color:var(--surface);
+    background-image:linear-gradient(to right,transparent 42px,rgba(239,68,68,.22) 42px,rgba(239,68,68,.22) 43px,transparent 43px),repeating-linear-gradient(to bottom,transparent 0,transparent 29px,var(--border) 30px);
+  }
+  .editor-redacao:focus { outline:2px solid rgba(108,99,255,.25); border-color:var(--accent); }
+  .redacao-contadores { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0 18px; }
+  .contador-item { background:var(--surface2); border-radius:9px; padding:9px; text-align:center; }
+  .contador-item strong { display:block; font-size:16px; }
+  .contador-item span { font-size:9px; text-transform:uppercase; color:var(--muted); letter-spacing:.7px; }
+  .checklist-redacao { border-top:1px solid var(--border); margin-top:18px; padding-top:14px; display:grid; grid-template-columns:repeat(2,1fr); gap:8px 14px; }
+  .check-redacao { display:flex; gap:8px; font-size:11px; line-height:1.4; color:var(--muted); }
+  .check-redacao input { accent-color:var(--green); }
+  .toast {
+    position:fixed; left:50%; bottom:24px; transform:translate(-50%,20px);
+    background:#1e2130; color:#fff; padding:11px 18px; border-radius:10px;
+    font-size:12px; opacity:0; pointer-events:none; transition:.25s; z-index:500;
+  }
+  .toast.visivel { opacity:1; transform:translate(-50%,0); }
+
+  body.dark {
+    --bg:#11131c; --surface:#1a1d2a; --surface2:#232738; --border:#32374d;
+    --text:#f3f4f8; --muted:#a8aec3; color-scheme:dark;
+  }
+  body.dark #tela-inicio { background:radial-gradient(ellipse at 60% 0%,#25234b 0%,var(--bg) 60%); }
+  body.dark .titulo-main { background:linear-gradient(135deg,#fff 30%,#a9a4ff); -webkit-background-clip:text; background-clip:text; }
+  body.dark .header-sim { background:rgba(17,19,28,.92); }
+  body.dark .rev-destaque,body.dark .coletanea { background:#232738; color:#e5e7f0; }
+  body.dark .rev-tabela-row:nth-child(even):not(.rev-tabela-head) { background:#1d202e; }
+
+  @media (max-width:700px) {
+    #tela-inicio { justify-content:flex-start; padding-top:72px; }
+    .modo-grid { grid-template-columns:1fr; }
+    .dashboard-grid { grid-template-columns:repeat(2,1fr); }
+    .reta-final-banner,.continue-card { align-items:flex-start; flex-direction:column; }
+    .result-actions > * { width:100%; }
+    .menu-lateral { flex-direction:row; right:12px; bottom:12px; }
+    .nav-questoes .btn-nav { flex:1; padding:10px 8px; }
+    .redacao-contadores { grid-template-columns:repeat(2,1fr); }
+    .checklist-redacao { grid-template-columns:1fr; }
+    .editor-redacao { padding-left:36px; min-height:500px; }
+  }
+
+  @media print {
+    body * { visibility:hidden; }
+    #tela-resultado,#tela-resultado * { visibility:visible; }
+    #tela-resultado { position:absolute; inset:0; background:#fff; color:#111; }
+    .result-actions,.top-actions { display:none!important; }
+  }
+
 </style>
 </head>
 <body>
 
+<div class="top-actions">
+  <button class="icon-action" id="btn-tema" onclick="alternarTema()" title="Alternar tema" aria-label="Alternar tema">🌙</button>
+</div>
+<div class="toast" id="toast"></div>
+
 <!-- ===================== TELA INÍCIO ===================== -->
 <div id="tela-inicio">
   <div class="logo-data">Simulado Encceja 2026</div>
-  <h1 class="titulo-main">Prepare-se para<br>o Ensino Médio</h1>
-  <p class="subtitulo">Escolha uma área: primeiro o conteúdo para estudar, depois o simulado para treinar — tudo no mesmo lugar.</p>
+  <h1 class="titulo-main">Reta final para<br>o Ensino Médio</h1>
+  <p class="subtitulo">Diagnóstico, revisão inteligente e treino direcionado para aproveitar cada dia antes da prova.</p>
+
+  <div class="reta-final-banner">
+    <div><strong>⚡ Agora é foco, correção e repetição inteligente</strong><span>Faça um diagnóstico, estude seus pontos fracos e refaça os erros até dominar o raciocínio.</span></div>
+    <button class="btn-main" onclick="iniciarRapido()" style="padding:11px 18px;font-size:13px;white-space:nowrap">Começar diagnóstico</button>
+  </div>
+
+  <div class="continue-card" id="continue-card">
+    <div class="continue-info"><strong>Você tem um simulado em andamento</strong><span id="continue-info">Seu progresso foi salvo automaticamente.</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-main" onclick="continuarSimulado()" style="padding:11px 18px;font-size:13px">Continuar</button>
+      <button class="btn-sec" onclick="descartarProgresso()" style="margin-top:0">Descartar</button>
+    </div>
+  </div>
 
   <div class="cards-area">
     <div class="area-card ch" onclick="abrirArea('ch')">
@@ -650,9 +789,31 @@
     </div>
   </div>
 
-  <div style="display:flex;gap:12px;margin-top:4px;flex-wrap:wrap;justify-content:center">
-    <button class="btn-sec" onclick="iniciarCompleto()" style="margin-top:0">▶ Simulado completo (40 questões, todas as áreas)</button>
-    <button class="btn-sec" onclick="mostrarRedacao()" style="margin-top:0">✍️ Exemplos de redação</button>
+  <div class="home-section" style="margin-top:0">
+    <div class="home-title">Escolha seu treino</div>
+    <div class="modo-grid">
+      <button class="modo-card" onclick="iniciarRapido()"><div class="modo-icon">⚡</div><strong>Diagnóstico rápido</strong><span>20 questões equilibradas para descobrir onde focar hoje.</span></button>
+      <button class="modo-card" onclick="iniciarCompleto()"><div class="modo-icon">🎯</div><strong>Simulado completo</strong><span>40 questões sorteadas, com tempo e desempenho por assunto.</span></button>
+      <button class="modo-card" onclick="iniciarIntensivo()"><div class="modo-icon">🔥</div><strong>Treino intensivo</strong><span>Todo o banco de questões para aprofundar a preparação.</span></button>
+    </div>
+  </div>
+
+  <div class="home-section">
+    <div class="home-title">Seu desempenho</div>
+    <div class="dashboard-grid" id="dashboard-home"></div>
+  </div>
+
+  <div class="home-section">
+    <div class="home-title">Plano de reta final</div>
+    <div class="plano-card">
+      <div class="plano-head"><div><strong id="plano-titulo">Plano inteligente de revisão</strong><br><span id="plano-sub">Conclua as etapas na ordem.</span></div><span id="plano-progresso">0/4</span></div>
+      <div id="plano-itens"></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center">
+    <button class="btn-sec" onclick="iniciarErrosAcumulados()" id="btn-erros-home" style="margin-top:0">🧠 Revisar erros anteriores</button>
+    <button class="btn-sec" onclick="mostrarRedacao()" style="margin-top:0">✍️ Treinar redação</button>
   </div>
 </div>
 
@@ -663,6 +824,7 @@
     <div class="progresso-container">
       <div class="progresso-label" id="prog-label">Questão 1 de 10</div>
       <div class="progresso-bar"><div class="progresso-fill" id="prog-fill" style="width:10%"></div></div>
+      <div class="save-status" id="save-status">Salvamento automático ativo</div>
     </div>
     <div class="timer" id="timer">04:00</div>
   </div>
@@ -708,9 +870,11 @@
     <div class="result-cards" id="res-cards"></div>
     <div id="res-detalhes"></div>
 
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px">
-      <button class="btn-main" onclick="voltarInicio()">🔄 Refazer outro simulado</button>
-      <button class="btn-sec" onclick="mostrarRedacao()">✍️ Ver exemplos de redação</button>
+    <div class="result-actions">
+      <button class="btn-main" onclick="revisarErrosDaUltima()">🧠 Refazer meus erros</button>
+      <button class="btn-sec" onclick="compartilharResultado()">📲 Compartilhar resultado</button>
+      <button class="btn-sec" onclick="window.print()">📄 Salvar relatório em PDF</button>
+      <button class="btn-sec" onclick="voltarInicio()">🏠 Voltar ao início</button>
     </div>
   </div>
 </div>
@@ -1005,7 +1169,7 @@
   </div>
 
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin:24px 0">
-    <button class="btn-main" onclick="iniciarArea('ch')">✏️ Praticar Ciências Humanas agora (10 questões)</button>
+    <button class="btn-main" onclick="iniciarArea('ch')">✏️ Praticar Ciências Humanas com questões variadas</button>
   </div>
 </div>
   </div>
@@ -1225,7 +1389,7 @@
   </div>
 
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin:24px 0">
-    <button class="btn-main" onclick="iniciarArea('lc')">✏️ Praticar Linguagens agora (10 questões)</button>
+    <button class="btn-main" onclick="iniciarArea('lc')">✏️ Praticar Linguagens com questões variadas</button>
   </div>
 </div>
   </div>
@@ -1561,7 +1725,7 @@
   </div>
 
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin:24px 0">
-    <button class="btn-main" onclick="iniciarArea('mat')">✏️ Praticar Matemática agora (10 questões)</button>
+    <button class="btn-main" onclick="iniciarArea('mat')">✏️ Praticar Matemática com questões variadas</button>
   </div>
 </div>
   </div>
@@ -1870,7 +2034,7 @@
   </div>
 
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin:24px 0">
-    <button class="btn-main" onclick="iniciarArea('cn')">✏️ Praticar Ciências da Natureza agora (10 questões)</button>
+    <button class="btn-main" onclick="iniciarArea('cn')">✏️ Praticar Ciências da Natureza com questões variadas</button>
   </div>
 </div>
   </div>
@@ -1900,13 +2064,50 @@
     <div class="redacao-sub">Padrão dissertativo-argumentativo • Máximo 30 linhas • Nota 0 a 10</div>
 
     <div class="tabs">
-      <button class="tab ativa" onclick="mudarTab('estrutura',this)">Estrutura</button>
+      <button class="tab ativa" onclick="mudarTab('treino',this)">Treinar agora</button>
+      <button class="tab" onclick="mudarTab('estrutura',this)">Estrutura</button>
       <button class="tab" onclick="mudarTab('exemplo1',this)">Exemplo nota 9</button>
       <button class="tab" onclick="mudarTab('exemplo2',this)">Exemplo nota 6</button>
       <button class="tab" onclick="mudarTab('exemplo3',this)">O que zera</button>
     </div>
 
-    <div id="tab-estrutura">
+    <div id="tab-treino">
+      <div class="tema-box">
+        <div class="tema-label">Tema para treinar</div>
+        <div class="tema-texto" id="tema-redacao-atual">O impacto do uso excessivo de tecnologia na saúde mental dos jovens brasileiros</div>
+        <div class="coletanea" id="apoio-redacao-atual">Reflita sobre saúde mental, uso responsável das tecnologias, papel da família, escola, empresas e poder público. Construa uma tese clara e apresente uma proposta de intervenção completa.</div>
+        <button class="btn-sec" onclick="sortearTemaRedacao()">🎲 Sortear outro tema</button>
+      </div>
+
+      <div class="treino-redacao-box">
+        <div class="redacao-tools">
+          <div><strong style="font-size:13px">Folha de treino</strong><br><span style="font-size:10px;color:var(--muted)">O texto é salvo automaticamente neste aparelho.</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span class="redacao-timer" id="timer-redacao">60:00</span><button class="btn-sec" onclick="alternarTimerRedacao()" id="btn-timer-redacao" style="margin:0;padding:7px 10px">▶ Iniciar</button></div>
+        </div>
+        <textarea class="editor-redacao" id="editor-redacao" maxlength="5000" oninput="atualizarEditorRedacao()" placeholder="Escreva aqui sua redação. Organize em introdução, dois parágrafos de desenvolvimento e conclusão com proposta de intervenção..."></textarea>
+        <div class="redacao-contadores">
+          <div class="contador-item"><strong id="cont-palavras">0</strong><span>Palavras</span></div>
+          <div class="contador-item"><strong id="cont-paragrafos">0</strong><span>Parágrafos</span></div>
+          <div class="contador-item"><strong id="cont-linhas">0</strong><span>Linhas estimadas</span></div>
+          <div class="contador-item"><strong id="cont-caracteres">0</strong><span>Caracteres</span></div>
+        </div>
+        <div class="estrutura-titulo">Checklist antes de finalizar</div>
+        <div class="checklist-redacao" id="checklist-redacao">
+          <label class="check-redacao"><input type="checkbox" onchange="salvarChecklistRedacao()"> Minha introdução apresenta o tema e uma tese clara.</label>
+          <label class="check-redacao"><input type="checkbox" onchange="salvarChecklistRedacao()"> Desenvolvi dois argumentos diferentes.</label>
+          <label class="check-redacao"><input type="checkbox" onchange="salvarChecklistRedacao()"> Usei exemplos, dados ou referências pertinentes.</label>
+          <label class="check-redacao"><input type="checkbox" onchange="salvarChecklistRedacao()"> Conectei os parágrafos com elementos de coesão.</label>
+          <label class="check-redacao"><input type="checkbox" onchange="salvarChecklistRedacao()"> Minha conclusão contém agente, ação, meio e finalidade.</label>
+          <label class="check-redacao"><input type="checkbox" onchange="salvarChecklistRedacao()"> Reli o texto e corrigi repetições e erros básicos.</label>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px">
+          <button class="btn-main" onclick="copiarRedacao()" style="padding:10px 18px;font-size:12px">📋 Copiar redação</button>
+          <button class="btn-sec" onclick="limparRedacao()" style="margin:0">🗑️ Começar novamente</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-estrutura" style="display:none">
       <div class="tema-box">
         <div class="tema-label">Tema típico — padrão Encceja</div>
         <div class="tema-texto">O impacto do uso excessivo de tecnologia na saúde mental dos jovens brasileiros</div>
@@ -2530,6 +2731,160 @@ const questoes = {
   ]
 };
 
+// Questões adicionais de aprofundamento para a reta final
+const questoesExtras = {
+  ch: [
+    {
+      num:11, area:"ch", tag:"História",
+      enunciado:`<p>Durante o governo de Getúlio Vargas, especialmente a partir de 1930, foram criadas leis trabalhistas, sindicatos passaram a ser reconhecidos pelo Estado e, em 1943, foi consolidada a CLT.</p><div class="trecho">Ao mesmo tempo que ampliava direitos, o Estado controlava a organização sindical: apenas sindicatos reconhecidos oficialmente podiam representar os trabalhadores.</div><p>Esse processo pode ser interpretado como:</p>`,
+      alternativas:["Eliminação completa dos conflitos entre patrões e empregados.","Ampliação de direitos combinada ao controle estatal sobre a organização dos trabalhadores.","Retirada do Estado das relações de trabalho e liberdade sindical irrestrita.","Substituição do trabalho assalariado pelo trabalho comunitário."],
+      gabarito:1,
+      comentario:"A política trabalhista de Vargas teve uma dupla dimensão: reconheceu direitos importantes, como salário mínimo, férias e regulamentação da jornada, mas vinculou os sindicatos ao Estado. Por isso, a alternativa B é a mais completa. A prova costuma cobrar essa leitura sem extremos: não foi apenas benefício nem apenas repressão; houve concessão de direitos e controle político ao mesmo tempo."
+    },
+    {
+      num:12, area:"ch", tag:"Geografia",
+      enunciado:`<p>Um país apresenta queda contínua das taxas de natalidade e mortalidade, aumento da expectativa de vida e crescimento da participação de idosos na população.</p><p>Qual desafio tende a ganhar importância nesse contexto?</p>`,
+      alternativas:["Expansão acelerada da população infantil e falta de creches.","Necessidade de ocupar áreas rurais por excesso de jovens nas cidades.","Pressão sobre previdência, saúde e políticas de cuidado para a população idosa.","Aumento inevitável da mortalidade infantil por causa da urbanização."],
+      gabarito:2,
+      comentario:"Queda da natalidade somada ao aumento da longevidade produz envelhecimento populacional. Isso exige adaptação da previdência, do sistema de saúde, da acessibilidade e das redes de cuidado. A alternativa C relaciona corretamente causa e consequência. Não significa que idosos sejam um problema; o desafio está em reorganizar políticas públicas para uma nova estrutura etária."
+    },
+    {
+      num:13, area:"ch", tag:"Sociologia",
+      enunciado:`<p>Em uma mesma cidade, bairros centrais possuem saneamento, transporte frequente, áreas de lazer e equipamentos de saúde, enquanto regiões periféricas convivem com esgoto a céu aberto, longos deslocamentos e poucos serviços públicos.</p><p>A situação exemplifica principalmente:</p>`,
+      alternativas:["Diferenças naturais inevitáveis entre regiões de uma cidade.","Desigualdade socioespacial e acesso desigual ao direito à cidade.","Ausência completa de relações entre renda e organização do espaço urbano.","Resultado exclusivo das escolhas individuais dos moradores periféricos."],
+      gabarito:1,
+      comentario:"O espaço urbano reflete desigualdades econômicas e decisões políticas. Quando infraestrutura e serviços se concentram em áreas valorizadas, ocorre desigualdade socioespacial. O conceito de direito à cidade envolve acesso a moradia, mobilidade, saneamento, saúde, cultura e participação. A alternativa B supera a explicação individualista e identifica o fenômeno estrutural."
+    },
+    {
+      num:14, area:"ch", tag:"História",
+      enunciado:`<p>A Lei Áurea aboliu juridicamente a escravidão em 1888. Entretanto, a maioria da população liberta não recebeu terra, indenização, escolarização ou políticas de inserção no trabalho.</p><p>Uma consequência histórica dessa situação foi:</p>`,
+      alternativas:["Integração econômica imediata e igualitária da população negra.","Fim do racismo, pois a igualdade passou a existir na lei.","Manutenção de desigualdades que continuaram após a abolição formal.","Retorno generalizado dos libertos ao continente africano."],
+      gabarito:2,
+      comentario:"A abolição foi essencial, mas não veio acompanhada de medidas de inclusão. Sem acesso a terra, educação e trabalho protegido, muitos libertos permaneceram em condições precárias. A alternativa C explica por que a igualdade jurídica não eliminou desigualdades sociais e raciais. Nas provas, diferencie abolição formal de inclusão social efetiva."
+    },
+    {
+      num:15, area:"ch", tag:"Geografia",
+      enunciado:`<p>Em grandes cidades, áreas densamente construídas costumam registrar temperaturas maiores que regiões próximas com parques e vegetação. Esse fenômeno é chamado de ilha de calor.</p><p>Qual conjunto de fatores favorece sua formação?</p>`,
+      alternativas:["Asfalto e concreto absorvendo calor, pouca vegetação e intensa atividade urbana.","Excesso de rios, florestas preservadas e baixa circulação de veículos.","Predomínio de solos permeáveis e telhados claros.","Redução das construções e aumento da evapotranspiração."],
+      gabarito:0,
+      comentario:"Asfalto, concreto e telhados escuros absorvem e liberam calor; a falta de árvores reduz sombra e evapotranspiração; veículos e equipamentos também liberam energia. Por isso, A está correta. Arborização, superfícies claras e áreas permeáveis ajudam a reduzir o fenômeno — exatamente o oposto das demais alternativas."
+    }
+  ],
+  lc: [
+    {
+      num:11, area:"lc", tag:"Interpretação",
+      enunciado:`<p>Leia o relato:</p><div class="trecho">Desativei as notificações por uma semana. As mensagens continuaram chegando, mas deixaram de interromper cada tarefa. No fim do dia, percebi que não havia perdido informação; apenas tinha recuperado a escolha de quando olhar para ela.</div><p>A principal reflexão apresentada pelo narrador é que:</p>`,
+      alternativas:["A comunicação digital deve ser completamente abandonada.","Mensagens só têm utilidade quando são respondidas imediatamente.","Controlar as interrupções permite usar a tecnologia com mais autonomia.","Desativar notificações impede que informações cheguem ao aparelho."],
+      gabarito:2,
+      comentario:"O texto não rejeita a tecnologia: as mensagens continuam chegando. A mudança está no controle da atenção — o narrador escolhe quando consultá-las. A alternativa C é uma inferência fiel. Em interpretação, desconfie de palavras absolutas como completamente, só e impede quando o texto apresenta uma posição equilibrada."
+    },
+    {
+      num:12, area:"lc", tag:"Gêneros Textuais",
+      enunciado:`<div class="trecho" style="text-align:center"><strong>ÁGUA PARADA NÃO!</strong><br>Reserve dez minutos por semana para verificar vasos, calhas e recipientes.<br><strong>Combater o mosquito é responsabilidade de todos.</strong></div><p>Nesse texto de campanha pública, predomina a função de linguagem:</p>`,
+      alternativas:["Poética, por explorar a beleza estética das palavras.","Conativa, por orientar o leitor a adotar uma ação.","Metalinguística, por explicar o próprio código linguístico.","Fática, por apenas testar o canal de comunicação."],
+      gabarito:1,
+      comentario:"Verbos no imperativo e orientações diretas ao leitor são marcas da função conativa ou apelativa. O objetivo central é provocar comportamento: verificar recipientes e combater o mosquito. Há informação, mas a intenção predominante é mobilizar. Em questões assim, procure o propósito principal, não apenas elementos secundários."
+    },
+    {
+      num:13, area:"lc", tag:"Variação Linguística",
+      enunciado:`<p>Um jovem escreve para um amigo: “Cê vai chegar que horas?”. Em uma entrevista de emprego, ele usa: “Qual é o horário previsto para o início?”.</p><p>A mudança de linguagem demonstra:</p>`,
+      alternativas:["Incapacidade de usar corretamente a língua portuguesa.","Existência de uma única forma legítima de comunicação.","Adequação da linguagem ao contexto, ao interlocutor e à finalidade.","Que a linguagem informal não possui regras nem significado."],
+      gabarito:2,
+      comentario:"Falantes competentes ajustam a linguagem conforme a situação. A fala informal não é ausência de regra; ela segue padrões próprios e é adequada em certos contextos. Na entrevista, espera-se maior formalidade. A alternativa C expressa a noção de adequação linguística e evita preconceito contra variedades populares."
+    },
+    {
+      num:14, area:"lc", tag:"Coesão Textual",
+      enunciado:`<p>Leia:</p><div class="trecho">A escola ampliou o horário da biblioteca e criou rodas semanais de leitura. <strong>Essas medidas</strong> aumentaram a frequência dos estudantes no espaço.</div><p>A expressão destacada exerce a função de:</p>`,
+      alternativas:["Introduzir uma ideia sem relação com a frase anterior.","Retomar as duas ações mencionadas, evitando repetição.","Substituir apenas a palavra estudantes.","Indicar uma conclusão contrária ao que foi apresentado."],
+      gabarito:1,
+      comentario:"Essas medidas retoma anaforicamente duas ações: ampliar o horário e criar rodas de leitura. Esse recurso constrói coesão e evita repetir toda a informação. A alternativa B identifica tanto o referente quanto a função. Sempre pergunte: a que termo anterior a expressão aponta?"
+    },
+    {
+      num:15, area:"lc", tag:"Inglês",
+      enunciado:`<div class="trecho"><strong>COMMUNITY LIBRARY</strong><br>Free books, internet access and study rooms.<br>Open Monday to Saturday. Everyone is welcome.</div><p>O principal objetivo do aviso é:</p>`,
+      alternativas:["Vender livros usados exclusivamente para estudantes.","Informar os serviços e a disponibilidade de uma biblioteca comunitária.","Restringir o acesso à internet durante a semana.","Anunciar o fechamento de salas de estudo."],
+      gabarito:1,
+      comentario:"Palavras transparentes e informações-chave resolvem a questão: free books, internet access, study rooms, open e everyone is welcome. O texto divulga serviços e horários da biblioteca. Não é necessário traduzir palavra por palavra; identifique gênero, palavras conhecidas e finalidade global."
+    }
+  ],
+  mat: [
+    {
+      num:11, area:"mat", tag:"Porcentagem",
+      enunciado:`<p>Um produto custava R$ 200,00. Em uma promoção recebeu desconto de 20%. Na semana seguinte, o preço promocional aumentou 10%.</p><p>Qual passou a ser o preço?</p>`,
+      alternativas:["R$ 176,00","R$ 180,00","R$ 190,00","R$ 200,00"],
+      gabarito:0,
+      comentario:"Primeiro desconto: 20% de 200 = 40, então o preço cai para 160. Depois, 10% de 160 = 16, resultando em 176. Não se deve cancelar 20% com 10%, pois os percentuais incidem sobre bases diferentes. Forma rápida: 200 × 0,80 × 1,10 = 176."
+    },
+    {
+      num:12, area:"mat", tag:"Escala",
+      enunciado:`<p>Na planta de uma casa, uma parede mede 6 cm. A escala utilizada é 1:50.</p><p>Qual é o comprimento real da parede?</p>`,
+      alternativas:["0,30 m","1,20 m","3,00 m","30,00 m"],
+      gabarito:2,
+      comentario:"Escala 1:50 significa que 1 cm no desenho representa 50 cm reais. Logo, 6 × 50 = 300 cm. Convertendo: 300 cm = 3 m. A alternativa C é correta. O erro mais comum é esquecer a conversão de centímetros para metros."
+    },
+    {
+      num:13, area:"mat", tag:"Funções",
+      enunciado:`<p>Uma corrida de aplicativo cobra uma taxa fixa de R$ 6,00 mais R$ 2,50 por quilômetro percorrido.</p><p>Quanto custará uma corrida de 10 km?</p>`,
+      alternativas:["R$ 25,00","R$ 31,00","R$ 60,00","R$ 85,00"],
+      gabarito:1,
+      comentario:"A função do preço é P(x) = 6 + 2,50x. Para 10 km: P(10) = 6 + 25 = 31. A taxa fixa é somada uma única vez, não multiplicada pela distância. Essa estrutura aparece em tarifas de táxi, planos e contas de consumo."
+    },
+    {
+      num:14, area:"mat", tag:"Estatística",
+      enunciado:`<p>Os tempos, em minutos, que seis pessoas levaram para concluir uma tarefa foram: 2, 4, 4, 5, 8 e 9.</p><p>Qual é a mediana?</p>`,
+      alternativas:["4","4,5","5","5,33"],
+      gabarito:1,
+      comentario:"Os dados já estão ordenados. Como há seis valores, a mediana é a média dos dois centrais: 4 e 5. Assim, (4 + 5) ÷ 2 = 4,5. O valor 5,33 é aproximadamente a média aritmética, não a mediana."
+    },
+    {
+      num:15, area:"mat", tag:"Geometria Espacial",
+      enunciado:`<p>Uma caixa-d'água retangular mede 2 m de comprimento, 1,5 m de largura e 1 m de altura.</p><p>Qual é sua capacidade máxima?</p>`,
+      alternativas:["300 litros","1.500 litros","2.000 litros","3.000 litros"],
+      gabarito:3,
+      comentario:"Volume = comprimento × largura × altura = 2 × 1,5 × 1 = 3 m³. Como 1 m³ corresponde a 1.000 litros, a capacidade é 3.000 litros. A prova frequentemente combina cálculo de volume com conversão de unidades."
+    }
+  ],
+  cn: [
+    {
+      num:11, area:"cn", tag:"Física",
+      enunciado:`<p>Um aparelho de 1.000 W permanece ligado durante 2 horas.</p><p>Qual é o consumo de energia elétrica nesse período?</p>`,
+      alternativas:["0,5 kWh","1 kWh","2 kWh","2.000 kWh"],
+      gabarito:2,
+      comentario:"Converta a potência: 1.000 W = 1 kW. Depois use E = P × t: 1 kW × 2 h = 2 kWh. Watt mede potência; kWh mede energia consumida. Não confunda 2.000 Wh com 2.000 kWh: 2.000 Wh equivalem a 2 kWh."
+    },
+    {
+      num:12, area:"cn", tag:"Química",
+      enunciado:`<p>Uma solução A possui pH 3 e uma solução B possui pH 5.</p><p>Comparando a acidez, é correto afirmar que a solução A é:</p>`,
+      alternativas:["2 vezes mais ácida que B.","10 vezes mais ácida que B.","100 vezes mais ácida que B.","Menos ácida que B."],
+      gabarito:2,
+      comentario:"A escala de pH é logarítmica: cada unidade representa variação de 10 vezes na concentração de íons H+. A diferença entre pH 3 e 5 é de duas unidades: 10² = 100. Portanto, A é 100 vezes mais ácida. Quanto menor o pH, maior a acidez."
+    },
+    {
+      num:13, area:"cn", tag:"Genética",
+      enunciado:`<p>Em determinada característica, A é dominante e a é recessivo. Dois indivíduos heterozigotos, Aa e Aa, têm um filho.</p><p>Qual é a probabilidade de o filho apresentar o fenótipo recessivo?</p>`,
+      alternativas:["0%","25%","50%","75%"],
+      gabarito:1,
+      comentario:"No cruzamento Aa × Aa, as combinações possíveis são AA, Aa, Aa e aa. Apenas aa manifesta o fenótipo recessivo: 1 caso em 4, ou 25%. Diferencie genótipo de fenótipo: três descendentes possuem pelo menos um A e mostram a característica dominante."
+    },
+    {
+      num:14, area:"cn", tag:"Ecologia",
+      enunciado:`<p>O excesso de fertilizantes levado pela chuva até um lago provoca grande crescimento de algas. Após algum tempo, muitos peixes morrem.</p><p>Qual processo explica melhor essa sequência?</p>`,
+      alternativas:["As algas transformam toda a água em substância tóxica imediatamente.","A decomposição da matéria orgânica consome oxigênio dissolvido, causando falta de oxigênio para os peixes.","Os fertilizantes fazem a água evaporar e reduzem o volume do lago.","Os peixes deixam de realizar fotossíntese por causa das algas."],
+      gabarito:1,
+      comentario:"O fenômeno é a eutrofização. Nutrientes favorecem algas; quando elas morrem, decompositores aumentam e consomem o oxigênio dissolvido. A queda do oxigênio causa morte de peixes. A alternativa B descreve a cadeia causal completa, tipo de raciocínio muito cobrado no Encceja."
+    },
+    {
+      num:15, area:"cn", tag:"Termologia",
+      enunciado:`<p>Cabos de panelas costumam ser feitos de madeira ou materiais plásticos, enquanto o corpo da panela é metálico.</p><p>Essa escolha ocorre principalmente porque:</p>`,
+      alternativas:["Madeira e plástico são bons condutores e aquecem mais rápido.","O metal impede a transferência de energia térmica para o alimento.","Madeira e plástico são maus condutores e reduzem a transferência de calor para a mão.","Todos os materiais conduzem calor da mesma maneira."],
+      gabarito:2,
+      comentario:"Metais conduzem calor com eficiência, por isso distribuem energia para o alimento. Madeira e muitos plásticos são isolantes térmicos: dificultam a condução até a mão. A alternativa C conecta propriedade do material e uso cotidiano. Atenção: isolante não significa impedir totalmente, mas reduzir a transferência."
+    }
+  ]
+};
+
+Object.keys(questoesExtras).forEach(area => questoes[area].push(...questoesExtras[area]));
+
 // Montar banco completo (completo = todas as 4 áreas)
 function getBancoCompleto() {
   return [...questoes.ch, ...questoes.lc, ...questoes.mat, ...questoes.cn];
@@ -2836,6 +3191,613 @@ function mudarTab(id, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativa'));
   btn.classList.add('ativa');
 }
+
+// =================== VERSÃO 2 — RETA FINAL INTELIGENTE ===================
+const CHAVE_PROGRESSO = 'encceja2026_progresso_v2';
+const CHAVE_HISTORICO = 'encceja2026_historico_v2';
+const CHAVE_PLANO = 'encceja2026_plano_v2';
+const CHAVE_TEMA = 'encceja2026_tema';
+const NOMES_AREA = { ch:'Ciências Humanas', lc:'Linguagens e Códigos', mat:'Matemática', cn:'Ciências da Natureza' };
+const CORES_AREA = { ch:'var(--ch)', lc:'var(--lc)', mat:'var(--mat)', cn:'var(--cn)' };
+const BADGES_AREA = { ch:'badge-ch', lc:'badge-lc', mat:'badge-mat', cn:'badge-cn' };
+let ultimoResultado = null;
+
+function embaralharArray(lista) {
+  const copia = [...lista];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+function idQuestao(q) { return q.qid || `${q.area}-${q.num}`; }
+
+function prepararQuestoes(lista) {
+  return embaralharArray(lista).map(q => {
+    const alternativas = embaralharArray(q.alternativas.map((texto, original) => ({ texto, original })));
+    return {
+      ...q,
+      qid: idQuestao(q),
+      alternativas: alternativas.map(a => a.texto),
+      gabarito: alternativas.findIndex(a => a.original === q.gabarito)
+    };
+  });
+}
+
+function selecionarBalanceado(qtdPorArea) {
+  return ['ch','lc','mat','cn'].flatMap(area => embaralharArray(questoes[area]).slice(0, qtdPorArea));
+}
+
+function carregarJSON(chave, fallback) {
+  try { return JSON.parse(localStorage.getItem(chave)) ?? fallback; }
+  catch { return fallback; }
+}
+
+function obterHistorico() { return carregarJSON(CHAVE_HISTORICO, []); }
+
+function iniciarSimulado(lista, area, modo, titulo, minutos) {
+  if (!lista.length) return;
+  if (localStorage.getItem(CHAVE_PROGRESSO) && !confirm('Há um simulado salvo. Deseja substituí-lo por este novo treino?')) return;
+  estado = {
+    questoes: prepararQuestoes(lista), atual: 0, respostas: {}, confirmadas: {},
+    area, modo, tituloModo: titulo, timer: null,
+    segundosRestantes: minutos * 60, segundosTotais: minutos * 60,
+    inicio: Date.now(), salvoEm: Date.now(), finalizado: false
+  };
+  configurarCabecalho();
+  mostrarTela('simulado');
+  renderQuestao();
+  salvarProgresso();
+  iniciarTimer();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function iniciarArea(area) {
+  iniciarSimulado(questoes[area], area, `area-${area}`, NOMES_AREA[area], Math.max(45, questoes[area].length * 4));
+}
+
+function iniciarRapido() {
+  iniciarSimulado(selecionarBalanceado(5), 'completo', 'diagnostico', 'Diagnóstico rápido', 60);
+}
+
+function iniciarCompleto() {
+  iniciarSimulado(selecionarBalanceado(10), 'completo', 'completo', 'Simulado completo', 160);
+}
+
+function iniciarIntensivo() {
+  iniciarSimulado(getBancoCompleto(), 'completo', 'intensivo', 'Treino intensivo', 240);
+}
+
+function configurarCabecalho() {
+  const badge = document.getElementById('area-badge');
+  const areaValida = ['ch','lc','mat','cn'].includes(estado.area);
+  badge.className = 'area-badge ' + (areaValida ? BADGES_AREA[estado.area] : 'badge-lc');
+  badge.textContent = estado.tituloModo || (areaValida ? NOMES_AREA[estado.area] : 'Simulado Encceja');
+}
+
+function salvarProgresso() {
+  if (!estado.questoes?.length || estado.finalizado) return;
+  estado.salvoEm = Date.now();
+  localStorage.setItem(CHAVE_PROGRESSO, JSON.stringify({ ...estado, timer: null }));
+  const status = document.getElementById('save-status');
+  if (status) status.textContent = '✓ Progresso salvo agora';
+  atualizarInicio();
+}
+
+function continuarSimulado() {
+  const salvo = carregarJSON(CHAVE_PROGRESSO, null);
+  if (!salvo?.questoes?.length) return atualizarInicio();
+  estado = { ...salvo, timer: null, finalizado: false };
+  configurarCabecalho();
+  mostrarTela('simulado');
+  renderQuestao();
+  iniciarTimer();
+  window.scrollTo(0, 0);
+}
+
+function descartarProgresso() {
+  if (!confirm('Deseja realmente apagar o simulado salvo?')) return;
+  localStorage.removeItem(CHAVE_PROGRESSO);
+  atualizarInicio();
+  mostrarToast('Progresso descartado.');
+}
+
+function mostrarTela(nome) {
+  ['inicio','simulado','resultado','redacao','revisao'].forEach(tela => {
+    const el = document.getElementById('tela-' + tela);
+    if (el) el.style.display = 'none';
+  });
+  const destino = document.getElementById('tela-' + nome);
+  if (destino) destino.style.display = nome === 'inicio' ? 'flex' : 'block';
+  if (nome === 'inicio') atualizarInicio();
+}
+
+function renderQuestao() {
+  const q = estado.questoes[estado.atual];
+  if (!q) return voltarInicio();
+  const total = estado.questoes.length;
+  const num = estado.atual + 1;
+  document.getElementById('prog-label').textContent = `Questão ${num} de ${total} · ${Object.keys(estado.respostas).length} respondidas`;
+  document.getElementById('prog-fill').style.width = `${(num / total) * 100}%`;
+  document.getElementById('q-num').textContent = `QUESTÃO ${num}`;
+  const tagColors = { ch:'rgba(245,158,11,.15)', lc:'rgba(108,99,255,.15)', mat:'rgba(34,197,94,.15)', cn:'rgba(56,189,248,.15)' };
+  const tagText = { ch:'#d97706', lc:'#6c63ff', mat:'#16a34a', cn:'#0284c7' };
+  const tagEl = document.getElementById('q-tag');
+  tagEl.textContent = q.tag;
+  tagEl.style.background = tagColors[q.area];
+  tagEl.style.color = tagText[q.area];
+  document.getElementById('enunciado').innerHTML = q.enunciado;
+
+  const letras = ['A','B','C','D'];
+  const altDiv = document.getElementById('alternativas');
+  altDiv.innerHTML = '';
+  q.alternativas.forEach((alt, i) => {
+    const div = document.createElement('div');
+    div.className = 'alt';
+    div.id = `alt-${i}`;
+    if (estado.confirmadas[estado.atual] !== undefined) {
+      const dada = estado.respostas[estado.atual];
+      if (i === q.gabarito) div.classList.add('correta');
+      else if (i === dada) div.classList.add('errada');
+    } else if (estado.respostas[estado.atual] === i) div.classList.add('selecionada');
+    div.innerHTML = `<div class="alt-letra">${letras[i]}</div><div>${alt}</div>`;
+    if (estado.confirmadas[estado.atual] === undefined) div.onclick = () => selecionarAlternativa(i);
+    altDiv.appendChild(div);
+  });
+
+  const confirmada = estado.confirmadas[estado.atual] !== undefined;
+  document.getElementById('gabarito-box').classList.toggle('visivel', confirmada);
+  if (confirmada) document.getElementById('gab-texto').textContent = q.comentario;
+  const btn = document.getElementById('btn-confirmar');
+  btn.disabled = confirmada;
+  btn.textContent = confirmada ? '✓ Confirmada' : 'Confirmar resposta';
+  renderMapa();
+}
+
+function selecionarAlternativa(i) {
+  if (estado.confirmadas[estado.atual] !== undefined) return;
+  estado.respostas[estado.atual] = i;
+  salvarProgresso();
+  renderQuestao();
+}
+
+function confirmarResposta() {
+  if (estado.respostas[estado.atual] === undefined) return mostrarToast('Selecione uma alternativa antes de confirmar.');
+  estado.confirmadas[estado.atual] = true;
+  salvarProgresso();
+  renderQuestao();
+}
+
+function proximaQuestao() {
+  if (estado.atual < estado.questoes.length - 1) {
+    estado.atual++;
+    salvarProgresso();
+    renderQuestao();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else encerrarSimulado(false);
+}
+
+function questaoAnterior() {
+  if (estado.atual > 0) {
+    estado.atual--;
+    salvarProgresso();
+    renderQuestao();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function renderMapa() {
+  const mapa = document.getElementById('mapa');
+  mapa.innerHTML = '';
+  estado.questoes.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'mapa-q';
+    if (i === estado.atual) div.classList.add('atual');
+    if (estado.respostas[i] !== undefined) div.classList.add('respondida');
+    div.textContent = i + 1;
+    div.title = estado.respostas[i] === undefined ? 'Não respondida' : 'Respondida';
+    div.onclick = () => { estado.atual = i; salvarProgresso(); renderQuestao(); window.scrollTo({top:0,behavior:'smooth'}); };
+    mapa.appendChild(div);
+  });
+}
+
+function iniciarTimer() {
+  if (estado.timer) clearInterval(estado.timer);
+  atualizarTimer();
+  estado.timer = setInterval(() => {
+    estado.segundosRestantes--;
+    atualizarTimer();
+    if (estado.segundosRestantes % 10 === 0) salvarProgresso();
+    if (estado.segundosRestantes <= 0) {
+      clearInterval(estado.timer);
+      encerrarSimulado(true);
+    }
+  }, 1000);
+}
+
+function atualizarTimer() {
+  const total = Math.max(0, estado.segundosRestantes || 0);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const timerEl = document.getElementById('timer');
+  timerEl.textContent = h > 0 ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  timerEl.className = total < 300 ? 'timer urgente' : 'timer';
+}
+
+function formatarTempo(segundos) {
+  const m = Math.floor(segundos / 60);
+  const s = segundos % 60;
+  return `${m}min ${String(s).padStart(2,'0')}s`;
+}
+
+function textoLimpo(html) {
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  return (div.textContent || '').replace(/\s+/g, ' ').trim();
+}
+
+function encerrarSimulado(automatico = false) {
+  if (estado.finalizado || !estado.questoes?.length) return;
+  const totalQ = estado.questoes.length;
+  const respondidas = Object.keys(estado.respostas).length;
+  const faltantes = totalQ - respondidas;
+  if (!automatico && faltantes > 0 && !confirm(`Ainda há ${faltantes} questão(ões) sem resposta. Deseja encerrar mesmo assim?`)) return;
+  if (estado.timer) clearInterval(estado.timer);
+  estado.finalizado = true;
+
+  const stats = { ch:{c:0,t:0}, lc:{c:0,t:0}, mat:{c:0,t:0}, cn:{c:0,t:0} };
+  const topicos = {};
+  const errosDetalhados = [];
+  let acertos = 0;
+  estado.questoes.forEach((q, i) => {
+    const correta = estado.respostas[i] === q.gabarito;
+    stats[q.area].t++;
+    if (correta) { stats[q.area].c++; acertos++; }
+    const chave = `${q.area}|${q.tag}`;
+    if (!topicos[chave]) topicos[chave] = { area:q.area, tag:q.tag, c:0, t:0 };
+    topicos[chave].t++;
+    if (correta) topicos[chave].c++;
+    else errosDetalhados.push({
+      qid:idQuestao(q), area:q.area, tag:q.tag,
+      pergunta:textoLimpo(q.enunciado),
+      marcada:estado.respostas[i] === undefined ? 'Não respondida' : q.alternativas[estado.respostas[i]],
+      correta:q.alternativas[q.gabarito], comentario:q.comentario
+    });
+  });
+  const pct = Math.round((acertos / totalQ) * 100);
+  const tempoUsado = Math.max(0, (estado.segundosTotais || 0) - (estado.segundosRestantes || 0));
+  const resultado = {
+    id:Date.now(), data:new Date().toISOString(), modo:estado.modo, titulo:estado.tituloModo,
+    acertos, total:totalQ, pct, respondidas, tempoUsado, stats, topicos,
+    erros:errosDetalhados.map(e => e.qid), errosDetalhados
+  };
+  ultimoResultado = resultado;
+  const historico = obterHistorico();
+  historico.unshift(resultado);
+  localStorage.setItem(CHAVE_HISTORICO, JSON.stringify(historico.slice(0, 30)));
+  localStorage.removeItem(CHAVE_PROGRESSO);
+  marcarPlanoAutomaticamente(estado.modo);
+
+  document.getElementById('res-titulo').textContent = pct >= 70 ? '🎉 Excelente reta final!' : pct >= 50 ? '📈 Você está avançando!' : '🎯 Agora sabemos onde focar!';
+  document.getElementById('res-sub').textContent = `${resultado.titulo} · ${respondidas} de ${totalQ} respondidas`;
+  document.getElementById('res-cards').innerHTML = `
+    <div class="result-card"><div class="rc-label">Acertos</div><div class="rc-val" style="color:var(--green)">${acertos}/${totalQ}</div><div class="rc-desc">questões corretas</div></div>
+    <div class="result-card"><div class="rc-label">Aproveitamento</div><div class="rc-val" style="color:${pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)'}">${pct}%</div><div class="rc-desc">aproveitamento geral</div></div>
+    <div class="result-card"><div class="rc-label">Tempo utilizado</div><div class="rc-val" style="font-size:25px">${formatarTempo(tempoUsado)}</div><div class="rc-desc">tempo de resolução</div></div>
+    <div class="result-card"><div class="rc-label">Para revisar</div><div class="rc-val" style="color:var(--yellow)">${errosDetalhados.length}</div><div class="rc-desc">erros ou não respondidas</div></div>`;
+
+  let detalhes = '<div class="section-label">Desempenho por área</div>';
+  Object.entries(stats).forEach(([area, s]) => {
+    if (!s.t) return;
+    const p = Math.round((s.c / s.t) * 100);
+    detalhes += `<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:600">${NOMES_AREA[area]}</span><span style="font-size:13px;color:var(--muted)">${s.c}/${s.t} · ${p}%</span></div><div class="barra-resultado"><div class="barra-resultado-fill" style="width:${p}%;background:${CORES_AREA[area]}"></div></div></div>`;
+  });
+
+  detalhes += '<div class="section-label">Diagnóstico por assunto</div>';
+  Object.values(topicos).sort((a,b) => (a.c/a.t) - (b.c/b.t)).forEach(t => {
+    const p = Math.round((t.c / t.t) * 100);
+    detalhes += `<div class="topic-row"><div class="topic-head"><span>${t.tag} <small style="color:var(--muted)">· ${NOMES_AREA[t.area]}</small></span><strong>${t.c}/${t.t} · ${p}%</strong></div><div class="barra-resultado"><div class="barra-resultado-fill" style="width:${p}%;background:${CORES_AREA[t.area]}"></div></div></div>`;
+  });
+
+  const areasOrdenadas = Object.entries(stats).filter(([,s]) => s.t).sort((a,b) => (a[1].c/a[1].t) - (b[1].c/b[1].t));
+  const foco = areasOrdenadas.slice(0,2).map(([a]) => NOMES_AREA[a]);
+  detalhes += `<div class="focus-box">🎯 <strong>Prioridade para os próximos estudos:</strong> ${foco.join(' e ') || 'refaça o diagnóstico'}. Primeiro leia a revisão dessas áreas, depois clique em <strong>Refazer meus erros</strong>. Não memorize apenas a letra: explique em voz alta por que a alternativa correta resolve o problema.</div>`;
+
+  if (errosDetalhados.length) {
+    detalhes += '<div class="section-label">Correção ativa dos erros</div><div class="erros-lista">';
+    errosDetalhados.forEach((e, i) => {
+      detalhes += `<details class="erro-item"><summary>${i+1}. ${e.tag} — ${e.pergunta.slice(0,110)}${e.pergunta.length>110?'…':''}</summary><div class="erro-corpo"><p><strong>Sua resposta:</strong> ${e.marcada}</p><p><strong>Resposta correta:</strong> ${e.correta}</p><p><strong>Raciocínio:</strong> ${e.comentario}</p></div></details>`;
+    });
+    detalhes += '</div>';
+  }
+  document.getElementById('res-detalhes').innerHTML = detalhes;
+  mostrarTela('resultado');
+  window.scrollTo(0, 0);
+}
+
+function localizarQuestoes(ids) {
+  const mapa = new Map(getBancoCompleto().map(q => [idQuestao(q), q]));
+  return ids.map(id => mapa.get(id)).filter(Boolean);
+}
+
+function revisarErrosDaUltima() {
+  const resultado = ultimoResultado || obterHistorico()[0];
+  if (!resultado?.erros?.length) return mostrarToast('Não há erros na última tentativa. Excelente!');
+  const lista = localizarQuestoes([...new Set(resultado.erros)]);
+  iniciarSimulado(lista, 'completo', 'erros', 'Revisão dos últimos erros', Math.max(20, lista.length * 4));
+}
+
+function iniciarErrosAcumulados() {
+  const ids = [...new Set(obterHistorico().slice(0,10).flatMap(h => h.erros || []))];
+  if (!ids.length) return mostrarToast('Faça primeiro um diagnóstico para criar sua lista de erros.');
+  iniciarSimulado(localizarQuestoes(ids), 'completo', 'erros', 'Revisão de erros acumulados', Math.max(25, ids.length * 4));
+}
+
+async function compartilharResultado() {
+  const r = ultimoResultado || obterHistorico()[0];
+  if (!r) return;
+  const texto = `Meu resultado no Simulado Encceja 2026: ${r.acertos}/${r.total} acertos (${r.pct}%). Vou continuar avançando!`;
+  const url = location.href.split('#')[0];
+  if (navigator.share) {
+    try { await navigator.share({ title:'Simulado Encceja 2026', text:texto, url }); return; } catch {}
+  }
+  window.open(`https://wa.me/?text=${encodeURIComponent(texto + ' ' + url)}`, '_blank');
+}
+
+function calcularResumo() {
+  const historico = obterHistorico();
+  const agregado = { ch:{c:0,t:0}, lc:{c:0,t:0}, mat:{c:0,t:0}, cn:{c:0,t:0} };
+  historico.forEach(h => Object.entries(h.stats || {}).forEach(([a,s]) => { agregado[a].c += s.c; agregado[a].t += s.t; }));
+  const areasComDados = Object.entries(agregado).filter(([,s]) => s.t);
+  const fraca = areasComDados.sort((a,b) => (a[1].c/a[1].t) - (b[1].c/b[1].t))[0]?.[0] || 'mat';
+  const erros = new Set(historico.flatMap(h => h.erros || [])).size;
+  return {
+    historico,
+    media:historico.length ? Math.round(historico.reduce((s,h) => s + h.pct, 0) / historico.length) : 0,
+    melhor:historico.length ? Math.max(...historico.map(h => h.pct)) : 0,
+    fraca, erros
+  };
+}
+
+function renderDashboard() {
+  const r = calcularResumo();
+  document.getElementById('dashboard-home').innerHTML = `
+    <div class="dash-card"><span>Tentativas</span><strong>${r.historico.length}</strong></div>
+    <div class="dash-card"><span>Média</span><strong>${r.media}%</strong></div>
+    <div class="dash-card"><span>Melhor resultado</span><strong>${r.melhor}%</strong></div>
+    <div class="dash-card"><span>Foco atual</span><strong style="font-size:13px;color:${CORES_AREA[r.fraca]}">${NOMES_AREA[r.fraca]}</strong></div>`;
+  const btn = document.getElementById('btn-erros-home');
+  btn.disabled = r.erros === 0;
+  btn.textContent = r.erros ? `🧠 Revisar ${r.erros} erro(s) acumulado(s)` : '🧠 Revisar erros anteriores';
+}
+
+function obterPlano() { return carregarJSON(CHAVE_PLANO, [false,false,false,false]); }
+
+function renderPlano() {
+  const resumo = calcularResumo();
+  const plano = obterPlano();
+  const itens = [
+    { texto:'Faça o diagnóstico rápido para medir o ponto de partida.', acao:'iniciarRapido()', botao:'Diagnóstico' },
+    { texto:`Revise primeiro ${NOMES_AREA[resumo.fraca]}, sua prioridade atual.`, acao:`abrirArea('${resumo.fraca}')`, botao:'Estudar' },
+    { texto:'Refaça os erros e explique o raciocínio correto em voz alta.', acao:'iniciarErrosAcumulados()', botao:'Corrigir erros' },
+    { texto:'Finalize com um simulado completo cronometrado.', acao:'iniciarCompleto()', botao:'Simulado final' }
+  ];
+  document.getElementById('plano-itens').innerHTML = itens.map((item,i) => `<div class="plano-item ${plano[i]?'concluido':''}"><input type="checkbox" ${plano[i]?'checked':''} onchange="alternarEtapaPlano(${i})"><label style="flex:1">${item.texto}</label><button class="btn-sec" onclick="${item.acao}" style="margin:0;padding:6px 10px;font-size:10px">${item.botao}</button></div>`).join('');
+  const concluidas = plano.filter(Boolean).length;
+  document.getElementById('plano-progresso').textContent = `${concluidas}/4 concluídas`;
+  document.getElementById('plano-sub').textContent = resumo.historico.length ? `Plano adaptado ao seu histórico de ${resumo.historico.length} tentativa(s).` : 'Comece pelo diagnóstico para personalizar seu foco.';
+}
+
+function alternarEtapaPlano(i) {
+  const plano = obterPlano();
+  plano[i] = !plano[i];
+  localStorage.setItem(CHAVE_PLANO, JSON.stringify(plano));
+  renderPlano();
+}
+
+function marcarPlanoAutomaticamente(modo) {
+  const plano = obterPlano();
+  if (modo === 'diagnostico') plano[0] = true;
+  if (modo === 'erros') plano[2] = true;
+  if (modo === 'completo' || modo === 'intensivo') plano[3] = true;
+  localStorage.setItem(CHAVE_PLANO, JSON.stringify(plano));
+}
+
+function atualizarInicio() {
+  const salvo = carregarJSON(CHAVE_PROGRESSO, null);
+  const card = document.getElementById('continue-card');
+  if (card) {
+    card.classList.toggle('visivel', !!salvo?.questoes?.length);
+    if (salvo?.questoes?.length) {
+      const respondidas = Object.keys(salvo.respostas || {}).length;
+      document.getElementById('continue-info').textContent = `${salvo.tituloModo || 'Simulado'} · ${respondidas}/${salvo.questoes.length} respondidas · ${formatarTempo(salvo.segundosRestantes || 0)} restantes`;
+    }
+  }
+  if (document.getElementById('dashboard-home')) renderDashboard();
+  if (document.getElementById('plano-itens')) renderPlano();
+}
+
+function voltarInicio() {
+  if (estado.timer) clearInterval(estado.timer);
+  pausarTimerRedacao();
+  if (estado.questoes?.length && !estado.finalizado) salvarProgresso();
+  mostrarTela('inicio');
+  window.scrollTo(0, 0);
+}
+
+function mostrarRedacao() {
+  if (estado.timer) clearInterval(estado.timer);
+  if (estado.questoes?.length && !estado.finalizado) salvarProgresso();
+  mostrarTela('redacao');
+  carregarTreinoRedacao();
+  window.scrollTo(0, 0);
+}
+
+function mostrarRevisao() {
+  if (estado.timer) clearInterval(estado.timer);
+  if (estado.questoes?.length && !estado.finalizado) salvarProgresso();
+  mostrarTela('revisao');
+  const areaAtual = ['ch','lc','mat','cn'].includes(estado.area) ? estado.area : calcularResumo().fraca;
+  selecionarAreaRevisao(areaAtual);
+  window.scrollTo(0, 0);
+}
+
+function mostrarToast(texto) {
+  const toast = document.getElementById('toast');
+  toast.textContent = texto;
+  toast.classList.add('visivel');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('visivel'), 2600);
+}
+
+function alternarTema() {
+  const escuro = !document.body.classList.contains('dark');
+  document.body.classList.toggle('dark', escuro);
+  localStorage.setItem(CHAVE_TEMA, escuro ? 'dark' : 'light');
+  document.getElementById('btn-tema').textContent = escuro ? '☀️' : '🌙';
+}
+
+function aplicarTema() {
+  const escuro = localStorage.getItem(CHAVE_TEMA) === 'dark';
+  document.body.classList.toggle('dark', escuro);
+  document.getElementById('btn-tema').textContent = escuro ? '☀️' : '🌙';
+}
+
+const CHAVE_REDACAO = 'encceja2026_redacao_v2';
+const TEMAS_REDACAO = [
+  { tema:'O impacto do uso excessivo de tecnologia na saúde mental dos jovens brasileiros', apoio:'Considere os efeitos sobre ansiedade, sono, aprendizagem e convivência. Discuta também o papel da educação digital, das famílias, das plataformas e do poder público.' },
+  { tema:'Caminhos para combater a desinformação no Brasil', apoio:'Reflita sobre educação midiática, responsabilidade das plataformas, checagem de fatos, liberdade de expressão e consequências sociais da circulação de conteúdos falsos.' },
+  { tema:'A importância da inclusão digital para o exercício da cidadania', apoio:'Considere acesso a serviços públicos, educação, trabalho e informação. Avalie desigualdades de infraestrutura, renda e formação para o uso das tecnologias.' },
+  { tema:'Desafios para garantir saúde mental e qualidade de vida no trabalho', apoio:'Discuta jornadas, pressão por resultados, prevenção do adoecimento, responsabilidade das empresas e políticas públicas de proteção ao trabalhador.' },
+  { tema:'O desperdício de alimentos e seus impactos sociais e ambientais', apoio:'Relacione produção, transporte, consumo, fome, uso de recursos naturais e possíveis ações de governos, empresas e consumidores.' },
+  { tema:'A necessidade de ampliar a acessibilidade para pessoas com deficiência', apoio:'Analise barreiras urbanas, comunicacionais, educacionais e profissionais. Proponha ações que promovam autonomia, participação e igualdade de oportunidades.' }
+];
+let timerRedacaoInterval = null;
+let segundosRedacao = 60 * 60;
+let temaRedacaoIndex = 0;
+
+function dadosRedacao() {
+  return carregarJSON(CHAVE_REDACAO, { texto:'', temaIndex:0, segundos:3600, checklist:[false,false,false,false,false,false] });
+}
+
+function carregarTreinoRedacao() {
+  const dados = dadosRedacao();
+  temaRedacaoIndex = Number.isInteger(dados.temaIndex) ? dados.temaIndex % TEMAS_REDACAO.length : 0;
+  segundosRedacao = Number.isFinite(dados.segundos) ? dados.segundos : 3600;
+  document.getElementById('editor-redacao').value = dados.texto || '';
+  document.querySelectorAll('#checklist-redacao input').forEach((input,i) => input.checked = !!dados.checklist?.[i]);
+  renderTemaRedacao();
+  atualizarEditorRedacao(false);
+  atualizarTimerRedacaoVisual();
+}
+
+function salvarTreinoRedacao() {
+  const checklist = [...document.querySelectorAll('#checklist-redacao input')].map(i => i.checked);
+  localStorage.setItem(CHAVE_REDACAO, JSON.stringify({
+    texto:document.getElementById('editor-redacao').value,
+    temaIndex:temaRedacaoIndex, segundos:segundosRedacao, checklist, salvoEm:Date.now()
+  }));
+}
+
+function renderTemaRedacao() {
+  const tema = TEMAS_REDACAO[temaRedacaoIndex];
+  document.getElementById('tema-redacao-atual').textContent = tema.tema;
+  document.getElementById('apoio-redacao-atual').textContent = tema.apoio;
+}
+
+function atualizarEditorRedacao(salvar = true) {
+  const texto = document.getElementById('editor-redacao').value;
+  const palavras = texto.trim() ? texto.trim().split(/\s+/).length : 0;
+  const paragrafos = texto.trim() ? texto.trim().split(/\n\s*\n|\n(?=\s{2,}|[A-ZÁÉÍÓÚÂÊÔÃÕÇ])/).filter(p => p.trim()).length : 0;
+  const quebras = (texto.match(/\n/g) || []).length;
+  const linhas = texto ? Math.ceil(texto.length / 70) + quebras : 0;
+  document.getElementById('cont-palavras').textContent = palavras;
+  document.getElementById('cont-paragrafos').textContent = paragrafos;
+  document.getElementById('cont-linhas').textContent = linhas;
+  document.getElementById('cont-linhas').style.color = linhas > 30 ? 'var(--red)' : linhas >= 20 ? 'var(--green)' : 'var(--text)';
+  document.getElementById('cont-caracteres').textContent = texto.length;
+  if (salvar) salvarTreinoRedacao();
+}
+
+function sortearTemaRedacao() {
+  const texto = document.getElementById('editor-redacao').value.trim();
+  if (texto.length > 50 && !confirm('Trocar o tema mantendo o texto atual? Você poderá apagar o texto depois, se desejar.')) return;
+  let novo = temaRedacaoIndex;
+  while (novo === temaRedacaoIndex && TEMAS_REDACAO.length > 1) novo = Math.floor(Math.random() * TEMAS_REDACAO.length);
+  temaRedacaoIndex = novo;
+  renderTemaRedacao();
+  salvarTreinoRedacao();
+  mostrarToast('Novo tema sorteado.');
+}
+
+function atualizarTimerRedacaoVisual() {
+  const m = Math.floor(Math.max(0, segundosRedacao) / 60);
+  const s = Math.max(0, segundosRedacao) % 60;
+  const el = document.getElementById('timer-redacao');
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.style.color = segundosRedacao < 600 ? 'var(--red)' : 'var(--accent2)';
+}
+
+function alternarTimerRedacao() {
+  if (timerRedacaoInterval) return pausarTimerRedacao();
+  if (segundosRedacao <= 0) segundosRedacao = 3600;
+  document.getElementById('btn-timer-redacao').textContent = '⏸ Pausar';
+  timerRedacaoInterval = setInterval(() => {
+    segundosRedacao--;
+    atualizarTimerRedacaoVisual();
+    if (segundosRedacao % 10 === 0) salvarTreinoRedacao();
+    if (segundosRedacao <= 0) {
+      pausarTimerRedacao();
+      mostrarToast('Tempo encerrado. Faça agora a revisão final do texto.');
+    }
+  }, 1000);
+}
+
+function pausarTimerRedacao() {
+  if (timerRedacaoInterval) clearInterval(timerRedacaoInterval);
+  timerRedacaoInterval = null;
+  const btn = document.getElementById('btn-timer-redacao');
+  if (btn) btn.textContent = '▶ Continuar';
+  if (document.getElementById('editor-redacao')) salvarTreinoRedacao();
+}
+
+function salvarChecklistRedacao() { salvarTreinoRedacao(); }
+
+async function copiarRedacao() {
+  const texto = document.getElementById('editor-redacao').value;
+  if (!texto.trim()) return mostrarToast('Escreva sua redação antes de copiar.');
+  try {
+    await navigator.clipboard.writeText(texto);
+  } catch {
+    const editor = document.getElementById('editor-redacao');
+    editor.select();
+    document.execCommand('copy');
+  }
+  mostrarToast('Redação copiada.');
+}
+
+function limparRedacao() {
+  if (!confirm('Deseja apagar o texto e reiniciar o treino de redação?')) return;
+  pausarTimerRedacao();
+  segundosRedacao = 3600;
+  document.getElementById('editor-redacao').value = '';
+  document.querySelectorAll('#checklist-redacao input').forEach(i => i.checked = false);
+  atualizarEditorRedacao();
+  atualizarTimerRedacaoVisual();
+  mostrarToast('Folha de redação limpa.');
+}
+
+window.addEventListener('beforeunload', () => {
+  if (estado.questoes?.length && !estado.finalizado) salvarProgresso();
+  if (document.getElementById('editor-redacao')) salvarTreinoRedacao();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  aplicarTema();
+  atualizarInicio();
+});
 
 // Accordion para tópicos de revisão
 document.addEventListener('click', function(e) {
