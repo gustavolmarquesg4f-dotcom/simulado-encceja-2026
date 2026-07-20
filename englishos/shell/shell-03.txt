@@ -33,6 +33,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="bundle-loader.js?v=7"></script>
+  <script src="bundle-loader.js?v=8"></script>
+  <script src="groq-enhancer.js?v=8"></script>
 </body>
 </html>
