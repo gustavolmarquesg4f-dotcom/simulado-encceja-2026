@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="comfort">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#eef6ff">
+  <meta name="description" content="EnglishOS Pro com Grace, professora de inglês profissional com IA.">
+  <title>EnglishOS Pro — Grace AI</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles/style-00.css?v=7"><link rel="stylesheet" href="styles/style-01.css?v=7"><link rel="stylesheet" href="styles/style-02.css?v=7"><link rel="stylesheet" href="styles/style-03.css?v=7">
+</head>
+<body>
+  <div id="accessLock" class="access-lock">
+    <div class="login-card">
+      <div class="grace-avatar large"><span>G</span><i></i></div>
+      <div class="eyebrow">ENGLISHOS PRO • GRACE AI</div>
+      <h1>Vamos construir seu inglês profissional.</h1>
+      <p>Eu vou ensinar, ouvir, corrigir e acompanhar sua evolução durante os 180 dias.</p>
+      <label class="field-label" for="accessPassword">Senha de acesso</label>
+      <div class="password-wrap">
+        <input id="accessPassword" type="password" placeholder="Digite sua senha" autocomplete="current-password" autofocus>
+        <button class="icon-button" type="button" id="togglePassword" aria-label="Mostrar senha">👁️</button>
+      </div>
+      <button class="primary full" id="loginButton" type="button">Entrar com a Grace</button>
+      <div id="accessError" class="error-line"></div>
+      <div class="login-status"><span id="loginAiDot" class="status-dot"></span><small id="loginAiStatus">Verificando conexão da Grace...</small></div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="grace-avatar"><span>G</span><i></i></div>
+        <div><strong>EnglishOS</strong><small>Grace AI</small></div>
+      </div>
+      <nav class="nav">
+        <button class="nav-button active" data-view="dashboard"><span>🏠</span><b>Painel</b></button>
+        <button class="nav-button" data-view="diagnostic"><span>🧭</span><b>Diagnóstico</b></button>
+        <button class="nav-button" data-view="teacher"><span>👩‍🏫</span><b>Grace ensina</b></button>
+        <button class="nav-button" data-view="lesson"><span>📘</span><b>Aula</b></button>
+        <button class="nav-button" data-view="pronunciation"><span>🎙️</span><b>Pronúncia</b></button>
+        <button class="nav-button" data-view="conversation"><span>💬</span><b>Conversação</b></button>
+        <button class="nav-button" data-view="games"><span>🎮</span><b>Jogos</b></button>
+        <button class="nav-button" data-view="assessment"><span>📝</span><b>Avaliações</b></button>
+        <button class="nav-button" data-view="practice"><span>🤝</span><b>Prática real</b></button>
+        <button class="nav-button" data-view="reports"><span>📊</span><b>Relatórios</b></button>
+        <button class="nav-button" data-view="roadmap"><span>🗓️</span><b>180 dias</b></button>
+        <button class="nav-button" data-view="settings"><span>⚙️</span><b>Ajustes</b></button>
+      </nav>
+      <div class="sidebar-card">
+        <div class="eyebrow">GRACE</div>
+        <div class="connection-line"><span id="aiDot" class="status-dot"></span><strong id="aiStatus">Verificando...</strong></div>
+        <small id="aiStatusDetail">Modo local disponível.</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" id="todayLabel">JORNADA DE 180 DIAS</div>
+          <h1 id="pageTitle">Olá, Gustavo 👋</h1>
+          <p id="pageSubtitle">A Grace preparou uma rotina objetiva para você aprender e usar inglês.</p>
+        </div>
+        <div class="top-actions">
+          <button class="soft-button" id="fontDown">A−</button>
+          <button class="soft-button" id="fontUp">A+</button>
+          <button class="soft-button" id="quickTheme">☀️ Tema</button>
+          <div class="profile-chip"><span>GM</span><div><b>Gustavo</b><small id="profileLevel">Nível inicial</small></div></div>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="metrics-grid">
+          <article class="metric-card"><span>Dia atual</span><strong id="metricDay">1/180</strong><small id="metricPhase">Fundação</small></article>
+          <article class="metric-card"><span>Sequência</span><strong id="metricStreak">0 🔥</strong><small>dias consecutivos</small></article>
+          <article class="metric-card"><span>Palavras</span><strong id="metricWords">0</strong><small>praticadas</small></article>
+          <article class="metric-card"><span>Experiência</span><strong id="metricXp">0 XP</strong><small id="metricLevel">Nível 1</small></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="card hero-card">
+            <div class="hero-copy">
+              <div class="eyebrow" id="heroPhase">FASE 1 • FUNDAÇÃO</div>
+              <h2 id="heroTitle">Comece pelo diagnóstico.</h2>
+              <p id="heroDescription">A Grace vai medir sua base e ajustar o ponto de partida.</p>
+              <div class="button-row">
+                <button class="primary" id="primaryDashboardAction" data-go="diagnostic">Fazer diagnóstico</button>
+                <button class="secondary" id="hearDailyPlan">🔊 Ouvir plano de hoje</button>
+              </div>
+            </div>
+            <div class="grace-panel">
+              <div class="grace-avatar hero-avatar"><span>G</span><i></i></div>
+              <div class="speech-bubble"><b>Grace diz:</b><p id="graceDailyMessage">“Eu vou acompanhar seus erros e transformar cada dificuldade em uma revisão.”</p></div>
+            </div>
+          </article>
+          <article class="card progress-card">
+            <div class="section-title"><div><span class="eyebrow">EVOLUÇÃO REAL</span><h3>Suas habilidades</h3></div><strong id="progressPercent">0%</strong></div>
+            <div class="large-progress"><i id="progressBar"></i></div>
+            <div class="skill-list">
+              <div><span>Escuta</span><div><i id="skillListening"></i></div><b id="skillListeningText">0%</b></div>
+              <div><span>Fala</span><div><i id="skillSpeaking"></i></div><b id="skillSpeakingText">0%</b></div>
+              <div><span>Vocabulário</span><div><i id="skillVocabulary"></i></div><b id="skillVocabularyText">0%</b></div>
+              <div><span>Escrita</span><div><i id="skillWriting"></i></div><b id="skillWritingText">0%</b></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="section-heading"><div><div class="eyebrow">ROTEIRO DE HOJE</div><h2>Uma rotina completa em seis etapas</h2></div><span class="status-pill" id="dailyStatus">0 de 6 etapas</span></div>
+        <div class="daily-path" id="dailyPath"></div>
+
+        <div class="three-column">
