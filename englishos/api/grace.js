@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { verifySession } from '../lib/session.js';
 
 const rateBuckets = new Map();
-const ALLOWED_MODES = new Set(['conversation', 'writing', 'pronunciation', 'teacher', 'diagnostic', 'assessment', 'weekly_report']);
+const ALLOWED_MODES = new Set(['conversation', 'writing', 'pronunciation', 'teacher', 'diagnostic', 'assessment', 'weekly_report', 'translation']);
 const DEEP_MODES = new Set(['diagnostic', 'assessment', 'weekly_report']);
 
 function rateLimit(req) {
@@ -41,13 +41,14 @@ Princípios pedagógicos obrigatórios:
 - Retorne somente JSON válido, sem markdown.`;
 
   const byMode = {
-    conversation: `Responda principalmente em inglês, em 2 a 5 frases curtas. Continue naturalmente o cenário. Use correction e explanation em português apenas quando houver erro relevante. Inclua translation somente quando o nível de ajuda for alto. Termine com uma única next_question em inglês.`,
+    conversation: `Responda principalmente em inglês, em 2 a 5 frases curtas. Continue naturalmente o cenário. Use correction e explanation em português apenas quando houver erro relevante. Inclua translation sempre que o nível de ajuda for alto e, no nível médio, apenas para a frase principal. Termine com uma única next_question em inglês.`,
     writing: `Avalie a produção sem apagar a voz do aluno. Dê score de 0 a 100. Informe um acerto específico, no máximo três melhorias e uma improved_answer natural. Se a resposta ainda não estiver suficiente, indique claramente a nova tentativa necessária.`,
     pronunciation: `Compare a frase-alvo com a transcrição reconhecida. A análise é textual e estimativa, não uma avaliação fonética clínica. Destaque no máximo quatro palavras possivelmente perdidas ou confundidas e dê uma orientação simples de ritmo ou articulação.`,
     teacher: `Dê uma pista progressiva baseada na aula e na tentativa. Não entregue a resposta completa na primeira pista. Use hint e, quando útil, um exemplo diferente do exercício.`,
     diagnostic: `Estime com prudência o nível CEFR entre A1, A2, B1 e B2. Dê score de 0 a 100, level, feedback curto, principais lacunas e três prioridades para os próximos 30 dias.`,
     assessment: `Avalie comunicação profissional por clareza, gramática, vocabulário, organização e adequação. Dê score de 0 a 100, feedback objetivo, versão melhor e um plano curto para o próximo mês.`,
-    weekly_report: `Analise apenas os dados enviados. Destaque evolução observável, principal dificuldade e três ações concretas para a próxima semana. Não invente atividades nem resultados.`
+    weekly_report: `Analise apenas os dados enviados. Destaque evolução observável, principal dificuldade e três ações concretas para a próxima semana. Não invente atividades nem resultados.`,
+    translation: `Atue como tradutora pedagógica entre português do Brasil e inglês. Detecte automaticamente o idioma de origem quando não for informado. Entregue uma tradução natural e fiel no campo translation, não uma tradução palavra por palavra. No campo explanation, explique em português no máximo duas escolhas importantes de vocabulário, gramática ou tom. No campo reply, forneça uma versão alternativa mais simples quando o texto for complexo. Use review_words para registrar até cinco palavras ou expressões úteis. Preserve nomes, siglas, números, termos técnicos, referências bíblicas e intenção profissional. Não invente informações e não acrescente uma pergunta.`
   };
 
   return `${common}\n${byMode[mode]}`;
