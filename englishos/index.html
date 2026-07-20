@@ -74,7 +74,7 @@
           const d=await r.json().catch(()=>({}));
           if(!r.ok)throw new Error(r.status===401?'Senha incorreta. Confira maiúsculas, minúsculas e o símbolo @.':(d.error||`Erro ${r.status} ao entrar.`));
           sessionStorage.setItem('englishos-access','granted');
-          location.replace('./app.html?v=10');
+          location.replace('./app.html?v=11');
         }catch(err){error.textContent=err.message||'Não foi possível entrar.';input.focus();input.select();}
         finally{busy=false;button.disabled=false;button.textContent='Entrar com a Grace';}
       });
