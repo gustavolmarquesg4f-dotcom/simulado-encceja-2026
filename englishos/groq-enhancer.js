@@ -9,6 +9,9 @@
   const $ = id => document.getElementById(id);
   const providerName = value => value === 'groq' ? 'Groq' : value === 'openai' ? 'OpenAI' : 'Local';
   const modelName = value => String(value || '').replace('openai/', '').replace(/-/g, ' ');
+  const setText = (node, value) => {
+    if (node && node.textContent !== value) node.textContent = value;
+  };
 
   function apiBase() {
     try {
@@ -97,9 +100,9 @@
     const conversationStatus = $('conversationStatus');
     const chip = $('graceProviderChip');
 
-    if (aiStatus) aiStatus.textContent = label;
-    if (aiStatusDetail) aiStatusDetail.textContent = detail;
-    if (loginAiStatus) loginAiStatus.textContent = online ? `${label} pronta para ensinar.` : detail;
+    setText(aiStatus, label);
+    setText(aiStatusDetail, detail);
+    setText(loginAiStatus, online ? `${label} pronta para ensinar.` : detail);
 
     ['aiDot', 'loginAiDot'].forEach(id => {
       const dot = $(id);
@@ -109,18 +112,18 @@
     });
 
     if (conversationStatus && busyCount === 0 && !/pensando|ouvindo/i.test(conversationStatus.textContent)) {
-      conversationStatus.textContent = online ? `Grace AI • ${providerName(provider)}` : 'Modo local';
+      setText(conversationStatus, online ? `Grace AI • ${providerName(provider)}` : 'Modo local');
     }
 
     if (chip) {
       chip.classList.toggle('online', online);
       chip.classList.toggle('busy', busyCount > 0);
-      chip.querySelector('b').textContent = busyCount > 0 ? 'Grace pensando...' : label;
-      chip.querySelector('small').textContent = online ? modelName(model) : 'modo de reserva';
+      setText(chip.querySelector('b'), busyCount > 0 ? 'Grace pensando...' : label);
+      setText(chip.querySelector('small'), online ? modelName(model) : 'modo de reserva');
     }
 
     const brandSmall = document.querySelector('.brand small');
-    if (brandSmall) brandSmall.textContent = online ? `Grace AI • ${providerName(provider)}` : 'Grace AI';
+    setText(brandSmall, online ? `Grace AI • ${providerName(provider)}` : 'Grace AI');
   }
 
   async function install() {
