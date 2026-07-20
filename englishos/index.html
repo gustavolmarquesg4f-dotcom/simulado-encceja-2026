@@ -1,1 +1,87 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EnglishOS Pro — Grace AI</title><style>body{margin:0;font-family:Segoe UI,Arial;background:#eef6ff;color:#17263a;display:grid;place-items:center;min-height:100vh}.loading{text-align:center;padding:30px}.g{width:72px;height:72px;margin:auto;border-radius:24px;display:grid;place-items:center;background:linear-gradient(135deg,#43d5b4,#75aaff);font-size:28px;font-weight:900}.spin{width:38px;height:38px;margin:20px auto;border:4px solid #d5e1ed;border-top-color:#137a68;border-radius:50%;animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div class="loading"><div class="g">G</div><h1>Preparando a Grace...</h1><p>Carregando seu curso completo.</p><div class="spin"></div></div><script>(async()=>{try{const files=Array.from({length:4},(_,i)=>`shell/shell-${String(i).padStart(2,'0')}.txt?v=7`);const html=(await Promise.all(files.map(async f=>{const r=await fetch(f,{cache:'no-store'});if(!r.ok)throw new Error(f);return r.text()}))).join('');document.open();document.write(html);document.close()}catch(e){document.body.innerHTML='<div class="loading"><div class="g">G</div><h1>Não consegui carregar</h1><p>Atualize usando Ctrl + F5.</p></div>'}})();</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#eef6ff">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <title>EnglishOS Pro — Grace AI</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,Segoe UI,Arial,sans-serif}body{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 20% 0%,rgba(19,122,104,.12),transparent 30%),radial-gradient(circle at 95% 4%,rgba(45,114,199,.14),transparent 32%),#eef6ff;color:#17263a}.card{width:min(480px,100%);background:#fff;border:1px solid #d5e1ed;border-radius:28px;padding:34px;box-shadow:0 28px 80px rgba(35,75,110,.18);position:relative;z-index:10}.avatar{width:82px;height:82px;margin:0 auto 15px;border-radius:28px;display:grid;place-items:center;background:linear-gradient(135deg,#43d5b4,#75aaff);font-size:30px;font-weight:900;color:#062119}.eyebrow{text-align:center;font-size:12px;letter-spacing:.12em;font-weight:900;color:#137a68}.card h1{text-align:center;margin:12px 0 8px;font-size:clamp(28px,6vw,38px)}.intro{text-align:center;color:#5f7187;line-height:1.55;margin:0 0 24px}.label{display:block;font-weight:800;margin-bottom:8px}.password-row{position:relative}.password-row input{display:block;width:100%;height:54px;border:2px solid #cbdbea;border-radius:14px;background:#f8fbff;color:#17263a;padding:0 58px 0 15px;font-size:18px;outline:none;pointer-events:auto!important;user-select:text!important;-webkit-user-select:text!important;opacity:1!important}.password-row input:focus{border-color:#2d72c7;box-shadow:0 0 0 4px rgba(45,114,199,.14)}.show{position:absolute;right:8px;top:7px;width:42px;height:40px;border:0;border-radius:10px;background:#e9f2fb;cursor:pointer;font-size:18px}.submit{width:100%;height:52px;margin-top:14px;border:0;border-radius:14px;background:#137a68;color:white;font-size:17px;font-weight:900;cursor:pointer}.submit:disabled{opacity:.65;cursor:wait}.error{min-height:24px;margin-top:10px;color:#b4233b;font-weight:800;text-align:center}.status{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:14px;color:#60758d;font-size:14px}.dot{width:10px;height:10px;border-radius:50%;background:#d08a15;box-shadow:0 0 0 4px rgba(208,138,21,.15)}.dot.online{background:#1ca06f;box-shadow:0 0 0 4px rgba(28,160,111,.15)}.hint{text-align:center;margin-top:16px;color:#71839a;font-size:13px}.noscript{background:#fff0f2;color:#8f1d35;padding:12px;border-radius:10px;margin-top:14px}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="avatar">G</div>
+    <div class="eyebrow">ENGLISHOS PRO • GRACE AI</div>
+    <h1>Vamos estudar inglês.</h1>
+    <p class="intro">Entre para acessar sua jornada de 180 dias com a Grace conectada à Groq.</p>
+    <form id="loginForm" autocomplete="on">
+      <label class="label" for="password">Senha de acesso</label>
+      <div class="password-row">
+        <input id="password" name="password" type="password" inputmode="text" autocomplete="current-password" autocapitalize="none" spellcheck="false" placeholder="Digite sua senha">
+        <button class="show" id="showPassword" type="button" aria-label="Mostrar senha">👁️</button>
+      </div>
+      <button class="submit" id="submitButton" type="submit">Entrar com a Grace</button>
+      <div class="error" id="error" role="alert"></div>
+    </form>
+    <div class="status"><span class="dot" id="dot"></span><span id="status">Verificando a Grace...</span></div>
+    <div class="hint">Senha sensível a letras maiúsculas e minúsculas.</div>
+    <noscript><div class="noscript">Ative o JavaScript para entrar.</div></noscript>
+  </main>
+  <script>
+    (()=>{
+      'use strict';
+      const form=document.getElementById('loginForm');
+      const input=document.getElementById('password');
+      const button=document.getElementById('submitButton');
+      const error=document.getElementById('error');
+      const status=document.getElementById('status');
+      const dot=document.getElementById('dot');
+      const show=document.getElementById('showPassword');
+      let busy=false;
+
+      if(location.hostname.endsWith('github.io')){
+        location.replace('https://simulado-encceja-2026.vercel.app/englishos/');
+        return;
+      }
+
+      input.disabled=false;
+      input.readOnly=false;
+      input.tabIndex=0;
+      input.style.pointerEvents='auto';
+      input.addEventListener('pointerdown',()=>input.focus());
+      input.addEventListener('click',()=>input.focus());
+      show.addEventListener('click',()=>{input.type=input.type==='password'?'text':'password';input.focus();});
+
+      async function health(){
+        try{
+          const r=await fetch('/api/health',{cache:'no-store',credentials:'include'});
+          const d=await r.json();
+          if(d.aiConfigured&&d.authConfigured){dot.classList.add('online');status.textContent=`Grace AI conectada • ${d.provider==='groq'?'Groq':'Online'}`;}
+          else status.textContent='Grace disponível, mas a configuração está incompleta.';
+        }catch{status.textContent='Verificação indisponível. O login ainda pode funcionar.';}
+      }
+
+      form.addEventListener('submit',async e=>{
+        e.preventDefault();
+        if(busy)return;
+        const password=input.value;
+        if(!password){error.textContent='Digite a senha.';input.focus();return;}
+        busy=true;error.textContent='';button.disabled=true;button.textContent='Validando...';
+        try{
+          const r=await fetch('/api/auth',{method:'POST',credentials:'include',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})});
+          const d=await r.json().catch(()=>({}));
+          if(!r.ok)throw new Error(r.status===401?'Senha incorreta. Confira maiúsculas, minúsculas e o símbolo @.':(d.error||`Erro ${r.status} ao entrar.`));
+          sessionStorage.setItem('englishos-access','granted');
+          location.replace('./app.html?v=10');
+        }catch(err){error.textContent=err.message||'Não foi possível entrar.';input.focus();input.select();}
+        finally{busy=false;button.disabled=false;button.textContent='Entrar com a Grace';}
+      });
+
+      health();
+      setTimeout(()=>input.focus(),200);
+    })();
+  </script>
+</body>
+</html>
