@@ -1,0 +1,43 @@
+        <div class="section-heading"><div><div class="eyebrow">LABORATÓRIO DE PRONÚNCIA</div><h2>Fale, compare e repita</h2><p>O navegador transcreve sua fala; a Grace compara e mostra o que precisa melhorar.</p></div><span class="status-pill" id="pronunciationScoreBadge">Sem tentativa</span></div>
+        <div class="two-column">
+          <article class="card pronunciation-card">
+            <div class="eyebrow">FRASE DO DIA</div><h3 id="pronunciationTarget"></h3>
+            <div class="button-row"><button class="secondary" id="hearPronunciation">🔊 Ouvir devagar</button><button class="secondary" id="newPronunciation">Outra frase</button></div>
+            <button class="mic-orb" id="pronunciationMic">🎙️</button><p class="center" id="pronunciationStatus">Clique e repita a frase.</p>
+            <div class="comparison-grid"><div><span>Você falou</span><p id="pronunciationHeard">—</p></div><div><span>Precisão estimada</span><strong id="pronunciationPercent">0%</strong></div></div>
+            <div id="pronunciationFeedback" class="grace-feedback"><div class="grace-mini">G</div><p>Vou observar as palavras reconhecidas e pedir repetição dos trechos difíceis.</p></div>
+          </article>
+          <aside class="card"><div class="eyebrow">TREINO INTELIGENTE</div><h3>Pontos que brasileiros costumam praticar</h3><ul class="plain-list"><li>TH em <b>think</b> e <b>this</b></li><li>Final de palavras como <b>project</b></li><li>R em <b>risk</b> e <b>review</b></li><li>Ritmo em frases profissionais</li></ul><div class="info-box">A pontuação é uma estimativa baseada no reconhecimento do navegador. Com a Grace online, você recebe uma análise textual mais detalhada.</div></aside>
+        </div>
+      </section>
+
+      <section id="conversation" class="view">
+        <div class="section-heading"><div><div class="eyebrow">CONVERSAÇÃO COM GRACE AI</div><h2>Uma conversa diferente a cada resposta</h2><p>Quando conectada, a Grace entende respostas livres, corrige e segue o assunto.</p></div><span class="status-pill" id="conversationStatus">Pronta</span></div>
+        <div class="conversation-layout">
+          <article class="card conversation-card">
+            <div class="conversation-header"><div class="grace-avatar conversation-avatar"><span>G</span><i></i></div><div><h3>Grace</h3><p id="conversationRole">Professora particular</p></div><button class="soft-button" id="speakLastReply">🔊 Repetir</button></div>
+            <div class="chat" id="conversationChat"></div>
+            <div class="quick-replies" id="quickReplies"></div>
+            <div class="conversation-composer"><button class="mic-button" id="conversationMic">🎙️</button><textarea id="conversationInput" placeholder="Fale ou escreva em inglês..."></textarea><button class="primary" id="sendConversation">Enviar</button></div>
+          </article>
+          <aside class="conversation-side">
+            <article class="card"><div class="eyebrow">CENÁRIO</div><select id="conversationScenario"><option value="daily">Dia a dia</option><option value="meeting">Reunião de projeto</option><option value="interview">Entrevista</option><option value="client">Cliente internacional</option><option value="technology">Tecnologia e AWS</option><option value="biblical">Bíblia e teologia</option></select><label class="field-label">Ajuda</label><select id="conversationHelp"><option value="high">Alta — tradução e modelo</option><option value="medium" selected>Média — pistas e correções</option><option value="low">Baixa — conversa mais livre</option></select></article>
+            <article class="card"><div class="eyebrow">MEMÓRIA DA CONVERSA</div><p id="conversationMemory">A Grace ainda está conhecendo seus padrões.</p></article>
+          </aside>
+        </div>
+      </section>
+
+      <section id="games" class="view">
+        <div class="section-heading"><div><div class="eyebrow">JOGOS DE REFORÇO</div><h2>Memorize sem infantilizar</h2><p>Vocabulário, construção de frases e escuta.</p></div><span class="status-pill" id="gameScoreBadge">0 pontos hoje</span></div>
+        <div class="game-tabs"><button class="game-tab active" data-game="match">🔗 Ligue</button><button class="game-tab" data-game="sentence">🧩 Frase</button><button class="game-tab" data-game="listening">🎧 Escuta</button><button class="game-tab" data-game="speed">⚡ Resposta rápida</button></div>
+        <article class="card game-area">
+          <div id="matchGame" class="game-panel active"><div class="game-head"><div><div class="eyebrow">JOGO 1</div><h3>Ligue inglês e português</h3></div><button class="secondary" id="resetMatch">Nova rodada</button></div><div class="matching-board"><div id="matchEnglish" class="match-column"></div><div id="matchPortuguese" class="match-column"></div></div><div class="game-feedback" id="matchFeedback"></div></div>
+          <div id="sentenceGame" class="game-panel"><div class="game-head"><div><div class="eyebrow">JOGO 2</div><h3>Monte a frase</h3></div><button class="secondary" id="resetSentence">Outra</button></div><p id="sentenceHintText"></p><div class="word-bank" id="sentenceBank"></div><div class="sentence-build" id="sentenceBuild"></div><div class="button-row"><button class="ghost" id="undoSentence">↩ Desfazer</button><button class="primary" id="checkSentence">Verificar</button></div><div class="game-feedback" id="sentenceFeedback"></div></div>
+          <div id="listeningGame" class="game-panel"><div class="game-head"><div><div class="eyebrow">JOGO 3</div><h3>O que a Grace falou?</h3></div><button class="secondary" id="newListening">Nova</button></div><button class="listen-orb" id="playListening">▶</button><div class="listening-options" id="listeningOptions"></div><div class="game-feedback" id="listeningFeedback"></div></div>
+          <div id="speedGame" class="game-panel"><div class="game-head"><div><div class="eyebrow">JOGO 4</div><h3>Responda em 20 segundos</h3></div><button class="secondary" id="newSpeed">Nova pergunta</button></div><div class="speed-timer" id="speedTimer">20</div><h3 id="speedPrompt"></h3><textarea id="speedAnswer" placeholder="Digite sua resposta rapidamente..."></textarea><button class="primary" id="checkSpeed">Enviar resposta</button><div class="game-feedback" id="speedFeedback"></div></div>
+        </article>
+      </section>
+
+      <section id="assessment" class="view">
+        <div class="section-heading"><div><div class="eyebrow">AVALIAÇÕES MENSAIS</div><h2>Comprove sua evolução</h2><p>Dias 30, 60, 90, 120, 150 e 180.</p></div><span class="status-pill" id="assessmentDue">Próxima: dia 30</span></div>
+        <div class="assessment-grid" id="assessmentCards"></div>
