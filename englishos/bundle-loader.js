@@ -6,8 +6,16 @@
       if(!response.ok) throw new Error(`Não consegui carregar ${file}.`);
       return response.text();
     }));
+    const blob=new Blob([parts.join('')],{type:'text/javascript'});
+    const url=URL.createObjectURL(blob);
     const script=document.createElement('script');
-    script.textContent=parts.join('');
+    script.src=url;
+    script.onload=()=>URL.revokeObjectURL(url);
+    script.onerror=()=>{
+      URL.revokeObjectURL(url);
+      const line=document.getElementById('accessError');
+      if(line) line.textContent='A Grace encontrou um erro ao iniciar. Atualize com Ctrl + F5.';
+    };
     document.body.appendChild(script);
   }catch(error){
     console.error(error);
