@@ -1,0 +1,38 @@
+        <article class="card hidden" id="assessmentRunner"><div class="eyebrow" id="assessmentLabel"></div><h3 id="assessmentPrompt"></h3><textarea id="assessmentAnswer" placeholder="Responda em inglês..."></textarea><div class="button-row"><button class="secondary" id="assessmentMic">🎙️ Responder falando</button><button class="primary" id="submitAssessment">Enviar para Grace</button></div><div id="assessmentFeedback" class="grace-feedback"></div></article>
+      </section>
+
+      <section id="practice" class="view">
+        <div class="section-heading"><div><div class="eyebrow">PRÁTICA REAL E GRAVAÇÃO</div><h2>Prepare-se para falar com pessoas</h2><p>Registre conversas reais e grave uma apresentação por semana.</p></div><span class="status-pill" id="practiceWeekStatus">0/2 conversas</span></div>
+        <div class="two-column">
+          <article class="card"><div class="eyebrow">CONVERSA HUMANA</div><h3>Registrar sessão</h3><label class="field-label">Com quem?</label><input id="practicePartner" placeholder="Professor, colega ou parceiro"><div class="input-row"><div><label class="field-label">Data</label><input id="practiceDate" type="date"></div><div><label class="field-label">Minutos</label><input id="practiceMinutes" type="number" min="5" value="30"></div></div><label class="field-label">O que foi difícil?</label><textarea id="practiceNotes" placeholder="Anote palavras, situações e dificuldades..."></textarea><button class="primary full" id="savePractice">Salvar prática</button><div id="practiceHistory" class="history-list"></div></article>
+          <article class="card"><div class="eyebrow">VÍDEO/ÁUDIO SEMANAL</div><h3 id="weeklyRecordingTitle">Apresente-se por 2 minutos</h3><p id="weeklyRecordingPrompt"></p><div class="record-controls"><button class="record-button" id="startRecording">● Gravar</button><button class="secondary" id="stopRecording" disabled>Parar</button></div><audio id="recordingPlayback" controls class="hidden"></audio><a id="downloadRecording" class="secondary-link hidden" download="englishos-semana.webm">Baixar gravação</a><div id="recordingFeedback" class="info-box">Grave, escute e faça uma segunda tentativa melhor.</div></article>
+        </div>
+      </section>
+
+      <section id="reports" class="view">
+        <div class="section-heading"><div><div class="eyebrow">RELATÓRIOS</div><h2>O que está realmente melhorando</h2><p>Atividade, habilidades, avaliações e erros recorrentes.</p></div><button class="secondary" id="generateAiReport">Grace, analisar minha semana</button></div>
+        <div class="metrics-grid"><article class="metric-card"><span>Minutos estudados</span><strong id="reportMinutes">0</strong><small>estimativa total</small></article><article class="metric-card"><span>Conversas</span><strong id="reportConversations">0</strong><small>com Grace e pessoas</small></article><article class="metric-card"><span>Avaliações</span><strong id="reportAssessments">0</strong><small>concluídas</small></article><article class="metric-card"><span>Precisão média</span><strong id="reportAccuracy">0%</strong><small>atividades avaliadas</small></article></div>
+        <div class="two-column"><article class="card"><div class="eyebrow">ÚLTIMOS 14 DIAS</div><div class="activity-chart" id="activityChart"></div></article><article class="card"><div class="eyebrow">ANÁLISE DA GRACE</div><div id="aiWeeklyReport"><p>Conclua atividades para receber uma análise semanal.</p></div></article></div>
+        <div class="two-column"><article class="card"><div class="eyebrow">ERROS RECORRENTES</div><div id="errorMemoryList" class="memory-list"></div></article><article class="card"><div class="eyebrow">PALAVRAS PARA REVISAR</div><div id="reviewWordList" class="tag-list"></div></article></div>
+      </section>
+
+      <section id="roadmap" class="view">
+        <div class="section-heading"><div><div class="eyebrow">PLANO COMPLETO</div><h2>180 dias com conteúdo progressivo</h2><p>Cada dia possui objetivo, cenário, vocabulário, escrita e fala.</p></div><span class="status-pill" id="roadmapProgress">0%</span></div>
+        <div class="phase-grid" id="phaseGrid"></div><article class="card"><div class="day-map" id="dayMap"></div></article>
+      </section>
+
+      <section id="settings" class="view">
+        <div class="section-heading"><div><div class="eyebrow">AJUSTES</div><h2>Adapte a plataforma à sua visão e rotina</h2></div></div>
+        <div class="settings-grid">
+          <article class="card"><h3>Aparência</h3><div class="theme-choices"><button class="theme-card" data-theme-choice="comfort">Claro confortável</button><button class="theme-card" data-theme-choice="contrast">Alto contraste</button><button class="theme-card" data-theme-choice="dark">Escuro</button></div><label class="field-label">Tamanho da fonte</label><input id="fontSizeRange" type="range" min="90" max="130" value="105"></article>
+          <article class="card"><h3>Professora</h3><label class="field-label">Estilo da Grace</label><select id="teacherStyle"><option value="patient">Paciente</option><option value="firm" selected>Firme e encorajadora</option><option value="intensive">Intensiva</option></select><label class="field-label">Velocidade da voz</label><input id="voiceRate" type="range" min="0.65" max="1.05" step="0.05" value="0.82"><span id="voiceRateLabel">0.82x</span><label class="field-label">Meta diária</label><select id="dailyMinutes"><option value="30">30 minutos</option><option value="45" selected>45 minutos</option><option value="60">60 minutos</option></select><button class="primary full" id="saveSettings">Salvar preferências</button></article>
+          <article class="card"><h3>Dados</h3><button class="secondary full" id="exportProgress">Exportar progresso</button><label class="secondary full file-label">Importar progresso<input id="importProgress" type="file" accept="application/json"></label><button class="danger full" id="resetProgress">Reiniciar progresso</button><button class="ghost full" id="logoutButton">Sair</button></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="bundle-loader.js?v=7"></script>
+</body>
+</html>
