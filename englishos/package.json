@@ -1,0 +1,8 @@
+{
+  "name": "englishos-grace-ai",
+  "version": "7.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "dependencies": { "openai": "^6.48.0" }
+}
