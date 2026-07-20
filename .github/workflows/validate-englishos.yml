@@ -1,0 +1,42 @@
+name: Validar EnglishOS Grace AI
+
+on:
+  push:
+    paths:
+      - 'englishos/**'
+      - '.github/workflows/validate-englishos.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+      - name: Usar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verificar quantidade de módulos
+        run: |
+          test "$(find englishos/bundle -name 'bundle-*.js' | wc -l)" -eq 13
+          test "$(find englishos/styles -name 'style-*.css' | wc -l)" -eq 4
+          test "$(find englishos/shell -name 'shell-*.txt' | wc -l)" -eq 4
+      - name: Montar e validar JavaScript
+        run: |
+          cat englishos/bundle/bundle-*.js > /tmp/englishos-grace.js
+          node --check /tmp/englishos-grace.js
+          node --check englishos/api/auth.js
+          node --check englishos/api/health.js
+          node --check englishos/api/grace.js
+          node --check englishos/lib/session.js
+      - name: Validar estrutura da plataforma
+        run: |
+          cat englishos/shell/shell-*.txt > /tmp/englishos.html
+          grep -q 'id="diagnostic"' /tmp/englishos.html
+          grep -q 'id="pronunciation"' /tmp/englishos.html
+          grep -q 'id="assessment"' /tmp/englishos.html
+          grep -q 'id="conversation"' /tmp/englishos.html
+          grep -q 'bundle-loader.js' /tmp/englishos.html
+          grep -q 'const lessons = \[\]' /tmp/englishos-grace.js
+          grep -q 'responses.create' englishos/api/grace.js
