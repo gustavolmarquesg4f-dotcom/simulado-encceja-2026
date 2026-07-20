@@ -36,5 +36,6 @@
   <script src="login-fix.js?v=9"></script>
   <script src="bundle-loader.js?v=8"></script>
   <script src="groq-enhancer.js?v=8"></script>
+  <script src="translation-mode.js?v=11"></script>
 </body>
 </html>
