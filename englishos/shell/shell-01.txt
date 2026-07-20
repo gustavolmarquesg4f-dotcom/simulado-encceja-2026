@@ -1,0 +1,73 @@
+          <article class="card"><div class="eyebrow">ERROS PARA REVISAR</div><h3 id="errorCount">0 pontos</h3><p id="errorSummary">A Grace começará a registrar seus padrões de erro.</p><button class="secondary" data-go="reports">Ver memória pedagógica</button></article>
+          <article class="card"><div class="eyebrow">PRÁTICA DA SEMANA</div><h3 id="weeklyMinutes">0 minutos</h3><p id="weeklyPracticeText">Meta: duas conversas reais de 30 minutos.</p><button class="secondary" data-go="practice">Registrar prática</button></article>
+          <article class="card"><div class="eyebrow">PRÓXIMA AVALIAÇÃO</div><h3 id="nextAssessment">Dia 30</h3><p>Prova prática com escrita, escuta e fala.</p><button class="secondary" data-go="assessment">Abrir avaliações</button></article>
+        </div>
+      </section>
+
+      <section id="diagnostic" class="view">
+        <div class="section-heading"><div><div class="eyebrow">DIAGNÓSTICO INICIAL</div><h2>Descubra seu ponto de partida</h2><p>Gramática, vocabulário, escrita e fala. Leva aproximadamente 15 minutos.</p></div><span class="status-pill" id="diagnosticStatus">Não iniciado</span></div>
+        <div class="two-column diagnostic-layout">
+          <article class="card">
+            <div id="diagnosticIntro">
+              <h3>Como funciona</h3>
+              <ul class="feature-list compact"><li><span>1</span><div><b>12 perguntas</b><small>Do básico ao inglês profissional.</small></div></li><li><span>2</span><div><b>Texto curto</b><small>Apresentação profissional.</small></div></li><li><span>3</span><div><b>Fala</b><small>Leitura e resposta pelo microfone.</small></div></li></ul>
+              <button class="primary" id="startDiagnostic">Começar diagnóstico</button>
+            </div>
+            <div id="diagnosticQuiz" class="hidden">
+              <div class="quiz-progress"><i id="diagnosticProgress"></i></div>
+              <div class="eyebrow" id="diagnosticCounter">PERGUNTA 1 DE 12</div>
+              <h3 id="diagnosticQuestion"></h3>
+              <div class="option-list" id="diagnosticOptions"></div>
+            </div>
+            <div id="diagnosticWriting" class="hidden">
+              <div class="eyebrow">ETAPA DE ESCRITA</div><h3>Apresente-se profissionalmente</h3><p>Escreva entre 5 e 8 frases em inglês.</p>
+              <textarea id="diagnosticWritingAnswer" placeholder="My name is Gustavo..."></textarea>
+              <button class="primary" id="submitDiagnosticWriting">Continuar</button>
+            </div>
+            <div id="diagnosticSpeaking" class="hidden">
+              <div class="eyebrow">ETAPA DE FALA</div><h3>Fale por 30 segundos</h3><p>Explique sua função e uma responsabilidade profissional.</p>
+              <button class="mic-big" id="diagnosticMic">🎙️</button><p id="diagnosticTranscript">Clique no microfone e fale em inglês.</p>
+              <button class="primary" id="finishDiagnostic">Finalizar diagnóstico</button>
+            </div>
+            <div id="diagnosticResult" class="hidden"></div>
+          </article>
+          <aside class="card"><div class="grace-avatar teacher-avatar"><span>G</span><i></i></div><h3>A Grace vai usar o resultado</h3><p>O diagnóstico define o nível inicial, a velocidade das aulas e os assuntos que precisam de reforço.</p><div class="info-box">Nenhum resultado será usado para limitar você. Ele serve apenas para personalizar o caminho.</div></aside>
+        </div>
+      </section>
+
+      <section id="teacher" class="view">
+        <div class="section-heading"><div><div class="eyebrow">MODO PROFESSORA</div><h2>Grace ensina até você entender</h2><p>Explicação, exemplo, teste e produção própria.</p></div><span class="status-pill" id="teacherStepBadge">Etapa 1 de 4</span></div>
+        <div class="teacher-layout">
+          <article class="card teacher-stage">
+            <div class="teacher-header"><div class="grace-avatar teacher-avatar"><span>G</span><i></i></div><div><div class="eyebrow">GRACE • PROFESSORA PARTICULAR</div><h3 id="teacherTopic"></h3><p id="teacherObjective"></p></div></div>
+            <div class="teacher-progress"><i id="teacherProgressBar"></i></div>
+            <div id="teacherContent" class="teacher-content"></div>
+            <div class="teacher-actions"><button class="secondary" id="teacherBack">← Voltar</button><div class="grow"></div><button class="ghost" id="teacherHint">💡 Pista</button><button class="primary" id="teacherNext">Continuar</button></div>
+          </article>
+          <aside class="teacher-side">
+            <article class="card"><div class="eyebrow">MEMÓRIA DA GRACE</div><h3 id="teacherMemoryTitle">Aprendendo seu padrão</h3><p id="teacherMemoryText">Quando você errar, a Grace registrará o ponto e criará revisões futuras.</p></article>
+            <article class="card encouragement-card"><div class="grace-mini">G</div><p id="teacherEncouragement">“Não vou apenas entregar a resposta. Vou ajudar você a construir a resposta.”</p></article>
+          </aside>
+        </div>
+      </section>
+
+      <section id="lesson" class="view">
+        <div class="section-heading"><div><div class="eyebrow">AULA DO DIA <span id="lessonDay">1</span></div><h2 id="lessonTitle"></h2><p id="lessonSubtitle"></p></div><span class="status-pill" id="lessonLevel">A1</span></div>
+        <div class="lesson-grid">
+          <article class="card">
+            <div class="lesson-block"><div class="eyebrow">VOCABULÁRIO</div><h3>Ouça, leia e use</h3><div class="vocabulary-grid" id="vocabularyGrid"></div></div>
+            <div class="lesson-block"><div class="eyebrow">ESTRUTURA</div><h3 id="grammarName"></h3><p id="grammarExplanation"></p><div class="example-box" id="grammarExample"></div></div>
+            <div class="lesson-block"><div class="eyebrow">ESCUTA</div><h3>Ouça o modelo da Grace</h3><div class="button-row"><button class="primary" id="listenModel">▶ Ouvir</button><button class="secondary" id="toggleTranscript">Mostrar texto</button></div><div class="transcript hidden" id="transcript"></div></div>
+          </article>
+          <article class="card mission-card">
+            <div class="eyebrow">MISSÃO ORIENTADA</div><h3 id="missionTitle"></h3><p id="missionInstructions"></p>
+            <textarea id="missionAnswer" placeholder="Escreva sua resposta em inglês..."></textarea>
+            <div class="button-row"><button class="secondary" id="dictateMission">🎙️ Ditar</button><button class="primary" id="checkMission">Grace, corrija</button></div>
+            <div class="grace-feedback" id="missionFeedback"><div class="grace-mini">G</div><p>Escreva primeiro. Depois eu vou corrigir e pedir uma nova tentativa quando necessário.</p></div>
+            <div class="mission-checklist" id="missionChecklist"></div>
+            <button class="primary full" id="completeLesson">Concluir aula</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="pronunciation" class="view">
