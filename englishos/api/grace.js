@@ -11,7 +11,11 @@ function rateLimit(req) {
   const key = `${ip}:${minute}`;
   const count = (rateBuckets.get(key) || 0) + 1;
   rateBuckets.set(key, count);
-  if (rateBuckets.size > 500) for (const k of rateBuckets.keys()) if (!k.endsWith(`:${minute}`)) rateBuckets.delete(k);
+  if (rateBuckets.size > 500) {
+    for (const k of rateBuckets.keys()) {
+      if (!k.endsWith(`:${minute}`)) rateBuckets.delete(k);
+    }
+  }
   return count <= 30;
 }
 
@@ -43,30 +47,60 @@ function parseJson(text) {
   return JSON.parse(match[0]);
 }
 
+async function callGroq({ mode, cleanBody }) {
+  const client = new OpenAI({
+    apiKey: process.env.GROQ_API_KEY,
+    baseURL: 'https://api.groq.com/openai/v1'
+  });
+  const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
+  const completion = await client.chat.completions.create({
+    model,
+    messages: [
+      { role: 'system', content: `${modeInstructions(mode)}\n${outputContract}` },
+      { role: 'user', content: `Modo: ${mode}\nDados do aluno e atividade: ${cleanBody}` }
+    ],
+    response_format: { type: 'json_object' },
+    temperature: 0.35,
+    max_tokens: 900
+  });
+  return completion.choices?.[0]?.message?.content || '';
+}
+
+async function callOpenAI({ req, mode, cleanBody }) {
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const model = process.env.OPENAI_MODEL || 'gpt-5-mini';
+  const response = await client.responses.create({
+    model,
+    instructions: `${modeInstructions(mode)}\n${outputContract}`,
+    input: `Modo: ${mode}\nDados do aluno e atividade: ${cleanBody}`,
+    max_output_tokens: 900,
+    store: false,
+    safety_identifier: safetyIdentifier(req)
+  });
+  return response.output_text || '';
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' });
   if (!verifySession(req, process.env.SESSION_SECRET)) return res.status(401).json({ error: 'Sessão expirada. Entre novamente.' });
   if (!rateLimit(req)) return res.status(429).json({ error: 'Muitas solicitações. Aguarde um minuto.' });
-  if (!process.env.OPENAI_API_KEY) return res.status(503).json({ error: 'A chave da OpenAI ainda não foi configurada.' });
+
+  const hasGroq = Boolean(process.env.GROQ_API_KEY);
+  const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
+  if (!hasGroq && !hasOpenAI) {
+    return res.status(503).json({ error: 'A chave da Grace ainda não foi configurada.' });
+  }
 
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
   const mode = ALLOWED_MODES.has(body.mode) ? body.mode : 'conversation';
   const cleanBody = JSON.stringify(body).slice(0, 30000);
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const model = process.env.OPENAI_MODEL || 'gpt-5-mini';
 
   try {
-    const response = await client.responses.create({
-      model,
-      instructions: `${modeInstructions(mode)}\n${outputContract}`,
-      input: `Modo: ${mode}\nDados do aluno e atividade: ${cleanBody}`,
-      max_output_tokens: 900,
-      store: false,
-      safety_identifier: safetyIdentifier(req)
-    });
-    const parsed = parseJson(response.output_text);
-    return res.status(200).json(parsed);
+    const text = hasGroq
+      ? await callGroq({ mode, cleanBody })
+      : await callOpenAI({ req, mode, cleanBody });
+    return res.status(200).json(parseJson(text));
   } catch (error) {
     console.error('Grace API error', error?.status || error?.name || 'unknown');
     return res.status(502).json({ error: 'A Grace não conseguiu responder agora. O modo local continua disponível.' });
