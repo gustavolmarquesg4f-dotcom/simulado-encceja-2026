@@ -37,5 +37,6 @@
   <script src="bundle-loader.js?v=8"></script>
   <script src="groq-enhancer.js?v=8"></script>
   <script src="translation-mode-v2.js?v=12"></script>
+  <script src="grace-live.js?v=15"></script>
 </body>
 </html>
