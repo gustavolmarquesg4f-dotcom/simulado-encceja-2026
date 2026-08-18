@@ -13,9 +13,7 @@ function rateLimit(req) {
   const count = (rateBuckets.get(key) || 0) + 1;
   rateBuckets.set(key, count);
   if (rateBuckets.size > 500) {
-    for (const k of rateBuckets.keys()) {
-      if (!k.endsWith(`:${minute}`)) rateBuckets.delete(k);
-    }
+    for (const k of rateBuckets.keys()) if (!k.endsWith(`:${minute}`)) rateBuckets.delete(k);
   }
   return count <= 30;
 }
@@ -50,43 +48,70 @@ Princípios pedagógicos obrigatórios:
     weekly_report: `Analise apenas os dados enviados. Destaque evolução observável, principal dificuldade e três ações concretas para a próxima semana. Não invente atividades nem resultados.`,
     translation: `Atue como tradutora pedagógica entre português do Brasil e inglês. Detecte automaticamente o idioma de origem quando não for informado. Entregue uma tradução natural e fiel no campo translation, não uma tradução palavra por palavra. No campo explanation, explique em português no máximo duas escolhas importantes de vocabulário, gramática ou tom. No campo reply, forneça uma versão alternativa mais simples quando o texto for complexo. Use review_words para registrar até cinco palavras ou expressões úteis. Preserve nomes, siglas, números, termos técnicos, referências bíblicas e intenção profissional. Não invente informações e não acrescente uma pergunta.`
   };
-
   return `${common}\n${byMode[mode]}`;
 }
 
 const outputContract = `Retorne um objeto JSON usando apenas os campos necessários entre: reply, translation, correction, explanation, improved_answer, next_question, hint, feedback, score, level, errors, review_words. score deve ser número de 0 a 100. errors deve ser uma lista curta de objetos com label, example e correction. review_words deve ser uma lista curta de palavras ou expressões. Não use blocos markdown.`;
 
 function parseJson(text) {
-  try {
-    return JSON.parse(text);
-  } catch {}
+  try { return JSON.parse(text); } catch {}
   const match = String(text || '').match(/\{[\s\S]*\}/);
   if (!match) throw new Error('Resposta inválida da Grace.');
   return JSON.parse(match[0]);
 }
 
+function groqError(status, body = '') {
+  const error = new Error('Falha na conexão com a Groq.');
+  error.provider = 'groq';
+  error.status = status;
+  error.providerBody = String(body || '').slice(0, 600);
+  if (status === 401) { error.code = 'GROQ_KEY_INVALID'; error.publicMessage = 'A chave da Groq está inválida ou foi revogada.'; }
+  else if (status === 403) { error.code = 'GROQ_MODEL_FORBIDDEN'; error.publicMessage = 'O projeto da Groq não tem permissão para usar este modelo.'; }
+  else if (status === 429) { error.code = 'GROQ_RATE_LIMIT'; error.publicMessage = 'O limite de uso da Groq foi atingido. Tente novamente em alguns minutos.'; }
+  else if (status === 404) { error.code = 'GROQ_MODEL_NOT_FOUND'; error.publicMessage = 'O modelo configurado não foi encontrado na Groq.'; }
+  else if (status >= 500) { error.code = 'GROQ_UNAVAILABLE'; error.publicMessage = 'A Groq está temporariamente indisponível.'; }
+  else { error.code = `GROQ_${status}`; error.publicMessage = 'A Groq recusou a solicitação. Verifique a configuração do projeto.'; }
+  return error;
+}
+
+async function groqRequest({ model, mode, cleanBody }) {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: `${modeInstructions(mode)}\n${outputContract}` },
+        { role: 'user', content: `Modo: ${mode}\nDados do aluno e atividade: ${cleanBody}\nResponda somente com o objeto JSON solicitado.` }
+      ],
+      response_format: { type: 'json_object' },
+      reasoning_effort: DEEP_MODES.has(mode) ? 'medium' : 'low',
+      temperature: mode === 'conversation' ? 0.45 : 0.25,
+      max_tokens: DEEP_MODES.has(mode) ? 1200 : 850
+    })
+  });
+  const raw = await response.text();
+  if (!response.ok) throw groqError(response.status, raw);
+  let data;
+  try { data = JSON.parse(raw); } catch { throw groqError(502, raw); }
+  return data.choices?.[0]?.message?.content || '';
+}
+
 async function callGroq({ mode, cleanBody }) {
-  const client = new OpenAI({
-    apiKey: process.env.GROQ_API_KEY,
-    baseURL: 'https://api.groq.com/openai/v1'
-  });
-  const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
-  const completion = await client.chat.completions.create({
-    model,
-    messages: [
-      { role: 'system', content: `${modeInstructions(mode)}\n${outputContract}` },
-      { role: 'user', content: `Modo: ${mode}\nDados do aluno e atividade: ${cleanBody}\nResponda somente com o objeto JSON solicitado.` }
-    ],
-    response_format: { type: 'json_object' },
-    reasoning_effort: DEEP_MODES.has(mode) ? 'medium' : 'low',
-    temperature: mode === 'conversation' ? 0.45 : 0.25,
-    max_tokens: DEEP_MODES.has(mode) ? 1200 : 850
-  });
-  return {
-    text: completion.choices?.[0]?.message?.content || '',
-    provider: 'groq',
-    model
-  };
+  const preferred = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
+  const fallback = 'openai/gpt-oss-20b';
+  try {
+    const text = await groqRequest({ model: preferred, mode, cleanBody });
+    return { text, provider: 'groq', model: preferred };
+  } catch (error) {
+    const canFallback = preferred !== fallback && ['GROQ_MODEL_FORBIDDEN', 'GROQ_MODEL_NOT_FOUND', 'GROQ_400'].includes(error.code);
+    if (!canFallback) throw error;
+    const text = await groqRequest({ model: fallback, mode, cleanBody });
+    return { text, provider: 'groq', model: fallback, fallback: true };
+  }
 }
 
 async function callOpenAI({ req, mode, cleanBody }) {
@@ -100,46 +125,47 @@ async function callOpenAI({ req, mode, cleanBody }) {
     store: false,
     safety_identifier: safetyIdentifier(req)
   });
-  return {
-    text: response.output_text || '',
-    provider: 'openai',
-    model
-  };
+  return { text: response.output_text || '', provider: 'openai', model };
 }
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' });
-  if (!verifySession(req, process.env.SESSION_SECRET)) return res.status(401).json({ error: 'Sessão expirada. Entre novamente.' });
-  if (!rateLimit(req)) return res.status(429).json({ error: 'Muitas solicitações. Aguarde um minuto.' });
+  if (!verifySession(req, process.env.SESSION_SECRET)) return res.status(401).json({ error: 'Sessão expirada. Entre novamente.', code: 'SESSION_EXPIRED' });
+  if (!rateLimit(req)) return res.status(429).json({ error: 'Muitas solicitações. Aguarde um minuto.', code: 'APP_RATE_LIMIT' });
 
   const hasGroq = Boolean(process.env.GROQ_API_KEY);
   const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
-  if (!hasGroq && !hasOpenAI) {
-    return res.status(503).json({ error: 'A chave da Grace ainda não foi configurada.' });
-  }
+  if (!hasGroq && !hasOpenAI) return res.status(503).json({ error: 'A chave da Grace ainda não foi configurada.', code: 'AI_NOT_CONFIGURED' });
 
   let body;
-  try {
-    body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-  } catch {
-    return res.status(400).json({ error: 'Solicitação inválida.' });
-  }
+  try { body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); }
+  catch { return res.status(400).json({ error: 'Solicitação inválida.', code: 'BAD_REQUEST' }); }
 
   const mode = ALLOWED_MODES.has(body.mode) ? body.mode : 'conversation';
   const cleanBody = JSON.stringify(body).slice(0, 30000);
 
   try {
-    const result = hasGroq
-      ? await callGroq({ mode, cleanBody })
-      : await callOpenAI({ req, mode, cleanBody });
+    let result;
+    if (hasGroq) {
+      try { result = await callGroq({ mode, cleanBody }); }
+      catch (groqFailure) {
+        if (!hasOpenAI) throw groqFailure;
+        result = await callOpenAI({ req, mode, cleanBody });
+        result.fallbackFrom = 'groq';
+      }
+    } else result = await callOpenAI({ req, mode, cleanBody });
+
     const parsed = parseJson(result.text);
     return res.status(200).json({
       ...parsed,
-      _meta: { provider: result.provider, model: result.model }
+      _meta: { provider: result.provider, model: result.model, fallback: Boolean(result.fallback || result.fallbackFrom) }
     });
   } catch (error) {
-    console.error('Grace API error', error?.status || error?.name || 'unknown');
-    return res.status(502).json({ error: 'A Grace não conseguiu responder agora. O modo local continua disponível.' });
+    console.error('Grace API error', error?.code || error?.status || error?.name || 'unknown');
+    return res.status(error?.status === 401 ? 502 : (error?.status || 502)).json({
+      error: error?.publicMessage || 'A Grace não conseguiu responder agora. O modo local continua disponível.',
+      code: error?.code || 'GRACE_UPSTREAM_ERROR'
+    });
   }
 }
