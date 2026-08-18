@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { verifySession } from '../lib/session.js';
 
 const rateBuckets = new Map();
-const ALLOWED_MODES = new Set(['conversation', 'writing', 'pronunciation', 'teacher', 'diagnostic', 'assessment', 'weekly_report', 'translation']);
+const ALLOWED_MODES = new Set(['conversation', 'guided_lesson', 'writing', 'pronunciation', 'teacher', 'diagnostic', 'assessment', 'weekly_report', 'translation']);
 const DEEP_MODES = new Set(['diagnostic', 'assessment', 'weekly_report']);
 
 function rateLimit(req) {
@@ -39,7 +39,8 @@ Princípios pedagógicos obrigatórios:
 - Retorne somente JSON válido, sem markdown.`;
 
   const byMode = {
-    conversation: `Responda principalmente em inglês, em 2 a 5 frases curtas. Continue naturalmente o cenário. Use correction e explanation em português apenas quando houver erro relevante. Inclua translation sempre que o nível de ajuda for alto e, no nível médio, apenas para a frase principal. Termine com uma única next_question em inglês.`,
+    conversation: `Conduza uma conversa realista, mas compatível com o nível informado. Responda principalmente em inglês, em 2 a 5 frases curtas. Continue naturalmente o cenário. Use correction e explanation em português apenas quando houver erro relevante. Inclua translation sempre que o nível de ajuda for alto e, no nível médio, para a frase principal. Termine com uma única next_question em inglês.`,
+    guided_lesson: `Você está em uma aula guiada por módulos. O conteúdo do módulo e da etapa atual enviado pelo sistema é uma fronteira rígida: NÃO avance gramática, vocabulário ou dificuldade além dele. Trabalhe uma única micro-habilidade por vez. Use no máximo 1 ou 2 frases curtas em inglês por resposta. Nos dias 1 a 30 sempre inclua translation em português; nos dias 31 a 60 inclua translation quando ajudar a compreensão. Se stage for repeat, compare a transcrição com target e dê feedback curto, priorizando inteligibilidade. Se stage for build, avalie a frase produzida e corrija apenas o maior erro. Se stage for speak, responda ao que o aluno disse usando somente o vocabulário e a estrutura do módulo, e faça apenas uma pergunta muito simples para continuar. Se stage for review, revise apenas o que já apareceu no módulo. Use score de 0 a 100 quando houver tentativa do aluno. Não introduza tópicos futuros e não transforme a aula em uma conversa aberta.`,
     writing: `Avalie a produção sem apagar a voz do aluno. Dê score de 0 a 100. Informe um acerto específico, no máximo três melhorias e uma improved_answer natural. Se a resposta ainda não estiver suficiente, indique claramente a nova tentativa necessária.`,
     pronunciation: `Compare a frase-alvo com a transcrição reconhecida. A análise é textual e estimativa, não uma avaliação fonética clínica. Destaque no máximo quatro palavras possivelmente perdidas ou confundidas e dê uma orientação simples de ritmo ou articulação.`,
     teacher: `Dê uma pista progressiva baseada na aula e na tentativa. Não entregue a resposta completa na primeira pista. Use hint e, quando útil, um exemplo diferente do exercício.`,
@@ -89,8 +90,8 @@ async function groqRequest({ model, mode, cleanBody }) {
       ],
       response_format: { type: 'json_object' },
       reasoning_effort: DEEP_MODES.has(mode) ? 'medium' : 'low',
-      temperature: mode === 'conversation' ? 0.45 : 0.25,
-      max_tokens: DEEP_MODES.has(mode) ? 1200 : 850
+      temperature: mode === 'conversation' ? 0.45 : mode === 'guided_lesson' ? 0.15 : 0.25,
+      max_tokens: DEEP_MODES.has(mode) ? 1200 : mode === 'guided_lesson' ? 500 : 850
     })
   });
   const raw = await response.text();
@@ -121,7 +122,7 @@ async function callOpenAI({ req, mode, cleanBody }) {
     model,
     instructions: `${modeInstructions(mode)}\n${outputContract}`,
     input: `Modo: ${mode}\nDados do aluno e atividade: ${cleanBody}`,
-    max_output_tokens: DEEP_MODES.has(mode) ? 1200 : 850,
+    max_output_tokens: DEEP_MODES.has(mode) ? 1200 : mode === 'guided_lesson' ? 500 : 850,
     store: false,
     safety_identifier: safetyIdentifier(req)
   });
