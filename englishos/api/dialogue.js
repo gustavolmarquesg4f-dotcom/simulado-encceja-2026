@@ -1,5 +1,12 @@
 import { verifySession } from '../lib/session.js';
 
+const GUSTAVO_PROFILE = {
+  professionEn: 'IT Project Manager and Agile Coach',
+  professionPt: 'Gerente de Projetos de TI e Agile Coach',
+  currentScope: 'technology project leadership, agile coaching, squad leadership, client and governance coordination',
+  experience: 'over 17 years in technology and project leadership'
+};
+
 function supportFor(day) {
   const d = Number(day || 1);
   if (d <= 30) return 'full';
@@ -18,8 +25,9 @@ function promptForSupport(level) {
 }
 
 function fallback(body) {
-  const target = String(body.target || 'My name is Gustavo.');
-  const translation = String(body.translation || 'Meu nome é Gustavo.');
+  const isProfessionCue = /what you do|profession|job|work|função|profissão/i.test(String(body.cue || ''));
+  const target = isProfessionCue ? 'I am an IT project manager and Agile Coach.' : String(body.target || 'My name is Gustavo.');
+  const translation = isProfessionCue ? 'Eu sou gerente de projetos de TI e Agile Coach.' : String(body.translation || 'Meu nome é Gustavo.');
   const cue = String(body.cue || 'Introduce yourself.');
   return {
     tutor: body.answer ? 'Good. Let us continue. Can you tell me one more thing about yourself?' : "Hi, I'm Grace. Nice to meet you. What would you like to tell me about yourself?",
@@ -57,6 +65,14 @@ export default async function handler(req, res) {
 
   const system = `Você é Grace, tutora particular de inglês de Gustavo. Conduza um DIÁLOGO GUIADO, não um exercício de repetição.
 
+PERFIL PROFISSIONAL CANÔNICO DE GUSTAVO — não altere, não simplifique e não invente outro cargo:
+- Profissão principal em inglês: ${GUSTAVO_PROFILE.professionEn}.
+- Em português: ${GUSTAVO_PROFILE.professionPt}.
+- Atuação atual: ${GUSTAVO_PROFILE.currentScope}.
+- Experiência: ${GUSTAVO_PROFILE.experience}.
+- Quando a pergunta for "What do you do?", "What is your job?" ou equivalente, a resposta-modelo preferida é: "I am an IT project manager and Agile Coach."
+- Não chame Gustavo apenas de "technology leader", "software engineer", "developer", "architect", "product manager" ou qualquer outra profissão que não esteja neste perfil.
+
 Regras obrigatórias:
 - Grace fala uma frase natural e faz UMA pergunta curta.
 - O aluno responde como Gustavo. Nunca peça para ele repetir exatamente o que Grace acabou de dizer.
@@ -67,7 +83,7 @@ Regras obrigatórias:
 - Corrija no máximo UM erro importante por turno, em português, somente se atrapalhar naturalidade ou entendimento.
 - Depois da resposta do aluno, reconheça brevemente o conteúdo e continue a conversa com a próxima pergunta.
 - O diálogo precisa parecer humano e progressivo, com respostas de Grace entre 1 e 2 frases curtas.
-- Gustavo tem mais de 17 anos de experiência em tecnologia; use isso somente quando o módulo permitir.
+- Use o perfil profissional canônico somente quando o assunto do módulo permitir.
 - ${promptForSupport(support)}
 
 Retorne SOMENTE JSON válido com estes campos:
@@ -94,7 +110,8 @@ Retorne SOMENTE JSON válido com estes campos:
     cue: body.cue || '',
     answer: String(body.answer || '').slice(0, 1200),
     turn: Number(body.turn || 0),
-    history
+    history,
+    canonical_profile: GUSTAVO_PROFILE
   };
 
   try {
