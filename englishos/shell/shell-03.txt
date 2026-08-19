@@ -17,7 +17,8 @@
       </section>
 
       <section id="roadmap" class="view">
-        <div class="section-heading"><div><div class="eyebrow">PLANO COMPLETO</div><h2>180 dias com conteúdo progressivo</h2><p>Cada dia possui objetivo, cenário, vocabulário, escrita e fala.</p></div><span class="status-pill" id="roadmapProgress">0%</span></div><article class="card"><div class="day-map" id="dayMap"></div></article>
+        <div class="section-heading"><div><div class="eyebrow">PLANO COMPLETO</div><h2>180 dias com conteúdo progressivo</h2><p>Cada dia possui objetivo, cenário, vocabulário, escrita e fala.</p></div><span class="status-pill" id="roadmapProgress">0%</span></div>
+        <div class="phase-grid" id="phaseGrid"></div><article class="card"><div class="day-map" id="dayMap"></div></article>
       </section>
 
       <section id="settings" class="view">
