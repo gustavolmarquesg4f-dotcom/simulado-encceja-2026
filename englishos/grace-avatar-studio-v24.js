@@ -1,0 +1,36 @@
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+let THREE,renderer,scene,camera,model,headBone,raf=0,ready=false,loading=false,blinkAt=0,blinkStart=0,speechStart=0,text='',morphs=[];
+const AVATAR='https://raw.githubusercontent.com/met4citizen/TalkingHead/main/avatars/avaturn.glb';
+const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.180.0/+esm';
+const LOADER_URL='https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js/+esm';
+function mount(){const p=document.querySelector('.live2-portrait');if(!p)return null;p.dataset.grace3d='studio24';p.className='live2-portrait grace3d';p.innerHTML='<div id="grace3dLoading" class="grace3d-loading">Preparando a Grace…</div><canvas id="grace3dCanvas" class="grace3d-canvas" aria-label="Grace, professora virtual 3D"></canvas>';return p}
+async function imports(){THREE=await import(THREE_URL);return (await import(LOADER_URL)).GLTFLoader}
+function mats(o){return o.material?(Array.isArray(o.material)?o.material:[o.material]):[]}
+function setColor(mat,hex){if(!mat?.color)return;mat.color.set(hex);mat.needsUpdate=true}
+function humanize(){model.traverse(o=>{if(!o.isMesh)return;const n=`${o.name} ${mats(o).map(m=>m.name||'').join(' ')}`.toLowerCase();for(const m of mats(o)){
+  m.needsUpdate=true;
+  if(m.map){m.map.colorSpace=THREE.SRGBColorSpace;m.map.needsUpdate=true;continue}
+  if(/hair|brow|eyelash/.test(n))setColor(m,0x332b2a);
+  else if(/eye|iris/.test(n)){setColor(m,/iris/.test(n)?0x5b4b3f:0xf5f4f0);}
+  else if(/teeth|mouth/.test(n))setColor(m,0xf4e8e4);
+  else if(/skin|head|face|body|arm|hand|leg/.test(n))setColor(m,0xc98f78);
+  else if(/glass/.test(n)){setColor(m,0x647176);m.transparent=true;m.opacity=.42;m.roughness=.15;}
+  else if(/shoe|boot/.test(n))setColor(m,0x27312f);
+  else if(/outfit|shirt|top|jacket|coat|dress/.test(n))setColor(m,0x2c5b52);
+  else if(/pant|bottom|skirt/.test(n))setColor(m,0x29333a);
+  else if(m.color&&m.color.r>.85&&m.color.g>.85&&m.color.b>.85)setColor(m,0xb7c8c2);
+}}
+)}
+function morph(names,value){for(const mesh of morphs){const d=mesh.morphTargetDictionary||{},a=mesh.morphTargetInfluences||[];for(const [k,i] of Object.entries(d)){const low=k.toLowerCase();if(names.some(n=>low.includes(n)))a[i]=value}}}
+function clearMouth(){morph(['viseme_','mouthopen','jawopen','mouthfunnel','mouthpucker','mouthclose','mouthpress'],0)}
+function visemeFor(c){c=String(c||'a').toLowerCase();if('bmp'.includes(c))return'viseme_pp';if('fv'.includes(c))return'viseme_ff';if('td'.includes(c))return'viseme_dd';if('kgq'.includes(c))return'viseme_kk';if('szx'.includes(c))return'viseme_ss';if(c==='r')return'viseme_rr';if(c==='o')return'viseme_o';if(c==='u')return'viseme_u';if(c==='e')return'viseme_e';if(c==='i')return'viseme_i';if('cj'.includes(c))return'viseme_ch';return'viseme_aa'}
+function speakAnim(now){const speaking=$('live2Stage')?.classList.contains('speaking');if(speaking&&!speechStart){speechStart=now;text=$('live2Caption')?.textContent||''}if(!speaking&&speechStart){speechStart=0;text='';clearMouth()}if(!speaking)return;const e=(now-speechStart)/1000,clean=text.toLowerCase().replace(/[^a-z]/g,'')||'a',c=clean[Math.floor(e*8)%clean.length]||'a',energy=.28+.28*Math.abs(Math.sin(e*13));clearMouth();morph(['mouthopen','jawopen'],Math.min(.56,energy));morph([visemeFor(c)],Math.min(.82,.36+energy*.58))}
+function blink(now){if(!blinkAt)blinkAt=now+2400+Math.random()*3400;if(!blinkStart&&now>blinkAt){blinkStart=now;blinkAt=0}if(!blinkStart)return;const t=(now-blinkStart)/180;if(t>=1){blinkStart=0;morph(['eyeblinkleft','eyeblinkright','eyesclosed'],0)}else morph(['eyeblinkleft','eyeblinkright','eyesclosed'],Math.sin(Math.PI*t))}
+function fit(){model.updateMatrixWorld(true);let box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());if(!Number.isFinite(size.y)||size.y<=0)throw Error('Avatar sem dimensões válidas');const scale=1.72/size.y;model.scale.setScalar(scale);model.updateMatrixWorld(true);box=new THREE.Box3().setFromObject(model);center=box.getCenter(new THREE.Vector3());model.position.x-=center.x;model.position.z-=center.z;model.position.y-=box.min.y;model.updateMatrixWorld(true);box=new THREE.Box3().setFromObject(model);size=box.getSize(new THREE.Vector3());const head=new THREE.Vector3();if(headBone)headBone.getWorldPosition(head);else head.set(0,size.y*.82,0);const y=Math.min(size.y*.87,Math.max(size.y*.70,head.y-.06));camera.fov=26;camera.position.set(0,y-.01,1.48);camera.lookAt(0,y-.055,0);camera.updateProjectionMatrix()}
+function resize(){const c=$('grace3dCanvas');if(!c||!renderer)return;const r=c.getBoundingClientRect(),w=Math.max(2,Math.round(r.width)),h=Math.max(2,Math.round(r.height));renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+function loop(now=0){raf=requestAnimationFrame(loop);if(!ready)return;resize();speakAnim(now);blink(now);if(headBone){const t=now*.001;headBone.rotation.y=Math.sin(t*.42)*.022;headBone.rotation.x=Math.sin(t*.31)*.009}renderer.render(scene,camera)}
+async function load(){if(loading||ready)return;loading=true;mount();try{const GLTFLoader=await imports(),canvas=$('grace3dCanvas');scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(26,1,.01,20);renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(1.7,devicePixelRatio||1));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.setClearColor(0x000000,0);scene.add(new THREE.HemisphereLight(0xfffaf5,0x6e8580,2.6));const key=new THREE.DirectionalLight(0xfff4ec,3.2);key.position.set(1.7,2.8,2.5);scene.add(key);const fill=new THREE.DirectionalLight(0xd9f2ec,1.6);fill.position.set(-2,1.5,1.8);scene.add(fill);const rim=new THREE.DirectionalLight(0xffffff,1.2);rim.position.set(-1,2,-2);scene.add(rim);model=(await new GLTFLoader().loadAsync(AVATAR)).scene;scene.add(model);morphs=[];headBone=null;model.traverse(o=>{if(o.isMesh){o.frustumCulled=false;if(o.morphTargetDictionary)morphs.push(o)}if(!headBone&&/(^|_|\.)head($|_|\.)/i.test(o.name))headBone=o});humanize();fit();ready=true;loading=false;$('grace3dLoading')?.remove();window.GraceAvatar3D={ready:true,reload:()=>{ready=false;loading=false;load()}};resize();renderer.render(scene,camera);loop()}catch(e){console.error('Grace studio avatar',e);const l=$('grace3dLoading');if(l)l.innerHTML='<div style="text-align:center"><b>Grace está disponível por voz.</b><br><small>O avatar não carregou neste dispositivo.</small></div>';loading=false}}
+function init(){let tries=0;const t=setInterval(()=>{if(document.querySelector('.live2-portrait')){clearInterval(t);load()}else if(++tries>80)clearInterval(t)},180);document.addEventListener('visibilitychange',()=>{if(document.hidden&&raf){cancelAnimationFrame(raf);raf=0}else if(!document.hidden&&ready&&!raf)loop()})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
