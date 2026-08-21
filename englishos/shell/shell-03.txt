@@ -37,13 +37,14 @@
   <script src="bundle-loader.js?v=8"></script>
   <script src="groq-enhancer.js?v=8"></script>
   <script src="translation-mode-v2.js?v=12"></script>
-  <script src="guided-path.js?v=23"></script>
-  <script src="profile-canonical.js?v=23"></script>
-  <script src="grace-live-v2.js?v=23"></script>
-  <script src="future-skin.js?v=23"></script>
-  <script src="grace-avatar-3d.js?v=23"></script>
-  <script src="voice-vad.js?v=23"></script>
-  <script src="dialogue-coach.js?v=23"></script>
-  <script src="coach-os-v23.js?v=23"></script>
+  <script src="guided-path.js?v=24"></script>
+  <script src="profile-canonical.js?v=24"></script>
+  <script src="grace-live-v2.js?v=24"></script>
+  <script src="future-skin.js?v=24"></script>
+  <script src="grace-avatar-studio-v24.js?v=24"></script>
+  <script src="voice-vad.js?v=24"></script>
+  <script src="dialogue-coach.js?v=24"></script>
+  <script src="coach-os-v23.js?v=24"></script>
+  <script src="studio-ui-v24.js?v=24"></script>
 </body>
 </html>
