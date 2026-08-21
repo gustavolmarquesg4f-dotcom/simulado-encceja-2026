@@ -25,7 +25,7 @@
         <div class="section-heading"><div><div class="eyebrow">AJUSTES</div><h2>Adapte a plataforma à sua visão e rotina</h2></div></div>
         <div class="settings-grid">
           <article class="card"><h3>Aparência</h3><div class="theme-choices"><button class="theme-card" data-theme-choice="comfort">Claro confortável</button><button class="theme-card" data-theme-choice="contrast">Alto contraste</button><button class="theme-card" data-theme-choice="dark">Escuro</button></div><label class="field-label">Tamanho da fonte</label><input id="fontSizeRange" type="range" min="90" max="130" value="105"></article>
-          <article class="card"><h3>Professora</h3><label class="field-label">Estilo da Grace</label><select id="teacherStyle"><option value="patient">Paciente</option><option value="firm" selected>Firme e encorajadora</option><option value="intensive">Intensiva</option></select><label class="field-label">Velocidade da voz</label><input id="voiceRate" type="range" min="0.65" max="1.05" step="0.05" value="0.82"><span id="voiceRateLabel">0.82x</span><label class="field-label">Meta diária</label><select id="dailyMinutes"><option value="30">30 minutos</option><option value="45" selected>45 minutos</option><option value="60">60 minutos</option></select><button class="primary full" id="saveSettings">Salvar preferências</button></article>
+          <article class="card"><h3>Professor</h3><label class="field-label">Estilo do Daniel</label><select id="teacherStyle"><option value="patient">Paciente</option><option value="firm" selected>Firme e encorajador</option><option value="intensive">Intensivo</option></select><label class="field-label">Velocidade da voz</label><input id="voiceRate" type="range" min="0.65" max="1.05" step="0.05" value="0.82"><span id="voiceRateLabel">0.82x</span><label class="field-label">Meta diária</label><select id="dailyMinutes"><option value="30">30 minutos</option><option value="45" selected>45 minutos</option><option value="60">60 minutos</option></select><button class="primary full" id="saveSettings">Salvar preferências</button></article>
           <article class="card"><h3>Dados</h3><button class="secondary full" id="exportProgress">Exportar progresso</button><label class="secondary full file-label">Importar progresso<input id="importProgress" type="file" accept="application/json"></label><button class="danger full" id="resetProgress">Reiniciar progresso</button><button class="ghost full" id="logoutButton">Sair</button></article>
         </div>
       </section>
@@ -37,14 +37,15 @@
   <script src="bundle-loader.js?v=8"></script>
   <script src="groq-enhancer.js?v=8"></script>
   <script src="translation-mode-v2.js?v=12"></script>
-  <script src="guided-path.js?v=26"></script>
-  <script src="profile-canonical.js?v=26"></script>
-  <script src="grace-live-v2.js?v=26"></script>
-  <script src="future-skin.js?v=26"></script>
-  <script src="voice-vad.js?v=26"></script>
-  <script src="dialogue-coach-v26.js?v=26"></script>
-  <script src="coach-os-v23.js?v=26"></script>
-  <script src="studio-ui-v24.js?v=26"></script>
-  <script src="grace-voice-presence-v25.js?v=26"></script>
+  <script src="guided-path.js?v=27"></script>
+  <script src="profile-canonical.js?v=27"></script>
+  <script src="grace-live-v2.js?v=27"></script>
+  <script src="future-skin.js?v=27"></script>
+  <script src="voice-vad.js?v=27"></script>
+  <script src="daniel-brand-v27.js?v=27"></script>
+  <script src="dialogue-coach-v26.js?v=27"></script>
+  <script src="coach-os-v23.js?v=27"></script>
+  <script src="studio-ui-v24.js?v=27"></script>
+  <script src="grace-voice-presence-v25.js?v=27"></script>
 </body>
 </html>
