@@ -16,29 +16,46 @@ function supportFor(day) {
   return 'minimal';
 }
 
-function promptForSupport(level) {
-  if (level === 'full') return 'Mostre uma resposta-modelo curta e completa em suggested_answer e sua tradução em suggested_translation.';
-  if (level === 'starter') return 'Em suggested_answer, mostre apenas o começo natural da resposta e use "..." para o aluno completar. Em suggested_translation, explique em português a intenção.';
-  if (level === 'cue') return 'Deixe suggested_answer vazio. Em hint, dê uma instrução curta em português e 2 ou 3 palavras-chave em inglês.';
-  if (level === 'keywords') return 'Deixe suggested_answer e suggested_translation vazios. Em hint, forneça somente 2 ou 3 palavras-chave em inglês.';
-  return 'Deixe suggested_answer, suggested_translation e hint vazios. O aluno deve responder sem apoio visível.';
+function supportInstruction(level) {
+  if (level === 'full') return 'Mostre uma resposta-modelo curta e completa em suggested_answer e uma tradução curta em suggested_translation.';
+  if (level === 'starter') return 'Mostre apenas o começo da resposta em suggested_answer, terminando com "...". suggested_translation explica a intenção em português.';
+  if (level === 'cue') return 'Deixe suggested_answer vazio. Em hint, dê uma instrução curta em português e até 3 palavras-chave em inglês.';
+  if (level === 'keywords') return 'Deixe suggested_answer e suggested_translation vazios. Em hint, dê apenas 2 ou 3 palavras-chave em inglês.';
+  return 'Deixe suggested_answer, suggested_translation e hint vazios.';
 }
 
-function fallback(body) {
-  const isProfessionCue = /what you do|profession|job|work|função|profissão/i.test(String(body.cue || ''));
-  const target = isProfessionCue ? 'I am an IT project manager and Agile Coach.' : String(body.target || 'My name is Gustavo.');
-  const translation = isProfessionCue ? 'Eu sou gerente de projetos de TI e Agile Coach.' : String(body.translation || 'Meu nome é Gustavo.');
-  const cue = String(body.cue || 'Introduce yourself.');
+function fallbackTurn(body) {
+  const turn = Math.max(0, Number(body.turn || 0));
+  const support = supportFor(body.day);
+  const turns = [
+    ["Hi, I'm Grace. What's your name?", 'Oi, eu sou a Grace. Qual é o seu nome?', 'Hi, I’m Gustavo.', 'Oi, eu sou o Gustavo.'],
+    ['Nice to meet you, Gustavo. Where do you live?', 'Prazer em conhecer você, Gustavo. Onde você mora?', 'I live in Brasília.', 'Eu moro em Brasília.'],
+    ['What do you do?', 'Com o que você trabalha?', 'I am an IT project manager and Agile Coach.', 'Eu sou gerente de projetos de TI e Agile Coach.'],
+    ['Do you work with technology projects?', 'Você trabalha com projetos de tecnologia?', 'Yes. I work with technology projects.', 'Sim. Eu trabalho com projetos de tecnologia.'],
+    ['Do you lead teams?', 'Você lidera equipes?', 'Yes. I lead project and agile teams.', 'Sim. Eu lidero equipes de projeto e ágeis.'],
+    ['How long have you worked in technology?', 'Há quanto tempo você trabalha com tecnologia?', 'I have over seventeen years of experience.', 'Eu tenho mais de dezessete anos de experiência.'],
+    ['What do you usually do at work?', 'O que você costuma fazer no trabalho?', 'I lead meetings and support teams.', 'Eu conduzo reuniões e apoio equipes.'],
+    ['Good. What is one thing you want to improve in English?', 'Certo. Qual é uma coisa que você quer melhorar no inglês?', 'I want to speak more confidently.', 'Eu quero falar com mais confiança.'],
+    ['Great work today. You kept the conversation going.', 'Bom trabalho hoje. Você conseguiu manter a conversa.', '', '']
+  ];
+  const [tutor, tutor_translation, answer, answerPt] = turns[Math.min(turn, turns.length - 1)];
   return {
-    tutor: body.answer ? 'Good. Let us continue. Can you tell me one more thing about yourself?' : "Hi, I'm Grace. Nice to meet you. What would you like to tell me about yourself?",
-    tutor_translation: body.answer ? 'Ótimo. Vamos continuar. Você pode me contar mais uma coisa sobre você?' : 'Oi, eu sou a Grace. Prazer em conhecer você. O que você gostaria de me contar sobre você?',
-    suggested_answer: supportFor(body.day) === 'full' ? target : '',
-    suggested_translation: supportFor(body.day) === 'full' ? translation : '',
-    hint: supportFor(body.day) === 'full' ? cue : '',
-    feedback: '',
-    correction: '',
+    tutor,
+    tutor_translation,
+    suggested_answer: support === 'full' ? answer : support === 'starter' && answer ? `${answer.split(' ').slice(0, 3).join(' ')}...` : '',
+    suggested_translation: support === 'full' ? answerPt : support === 'starter' ? answerPt : '',
+    hint: support === 'cue' ? String(body.cue || 'Responda com uma frase curta.') : support === 'keywords' ? String(body.target || '').split(' ').slice(0, 3).join(' · ') : '',
+    understood: true,
     accepted: true,
-    support: supportFor(body.day)
+    feedback: body.answer ? 'Entendi sua resposta. Vamos continuar.' : '',
+    correction: '',
+    better_answer: '',
+    why: '',
+    repeat_needed: false,
+    focus: String(body.goal || ''),
+    session_complete: turn >= 8,
+    summary: turn >= 8 ? 'Você concluiu uma conversa curta em inglês.' : '',
+    support
   };
 }
 
@@ -57,50 +74,61 @@ export default async function handler(req, res) {
 
   let body = req.body || {};
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
-
   const day = Math.max(1, Math.min(180, Number(body.day || 1)));
+  const turn = Math.max(0, Number(body.turn || 0));
   const support = supportFor(day);
-  const history = Array.isArray(body.history) ? body.history.slice(-10) : [];
+  const history = Array.isArray(body.history) ? body.history.slice(-14) : [];
   const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
-  const system = `Você é Grace, tutora particular de inglês de Gustavo. Conduza um DIÁLOGO GUIADO, não um exercício de repetição.
+  const system = `Você é Grace, professora particular de inglês falado de Gustavo. A meta é inglês funcional em 6 meses. Sua prioridade é FAZER GUSTAVO SUSTENTAR UMA CONVERSA, não dar aula expositiva, não criar um quiz e não pedir repetição mecânica.
 
-PERFIL PROFISSIONAL CANÔNICO DE GUSTAVO — não altere, não simplifique e não invente outro cargo:
-- Profissão principal em inglês: ${GUSTAVO_PROFILE.professionEn}.
-- Em português: ${GUSTAVO_PROFILE.professionPt}.
-- Atuação atual: ${GUSTAVO_PROFILE.currentScope}.
+PERFIL PROFISSIONAL CANÔNICO — use somente quando a pergunta realmente envolver trabalho:
+- ${GUSTAVO_PROFILE.professionEn} (${GUSTAVO_PROFILE.professionPt}).
+- Atuação: ${GUSTAVO_PROFILE.currentScope}.
 - Experiência: ${GUSTAVO_PROFILE.experience}.
-- Quando a pergunta for "What do you do?", "What is your job?" ou equivalente, a resposta-modelo preferida é: "I am an IT project manager and Agile Coach."
-- Não chame Gustavo apenas de "technology leader", "software engineer", "developer", "architect", "product manager" ou qualquer outra profissão que não esteja neste perfil.
+- Nunca invente outro cargo ou simplifique o cargo para outra profissão.
 
-Regras obrigatórias:
-- Grace fala uma frase natural e faz UMA pergunta curta.
-- O aluno responde como Gustavo. Nunca peça para ele repetir exatamente o que Grace acabou de dizer.
-- tutor e suggested_answer devem representar papéis diferentes e NÃO podem ser a mesma frase.
-- Use apenas o conteúdo, gramática e dificuldade do módulo atual recebido.
-- Não avance para assuntos futuros.
-- Aceite respostas equivalentes à sugestão. Não exija correspondência palavra por palavra.
-- Corrija no máximo UM erro importante por turno, em português, somente se atrapalhar naturalidade ou entendimento.
-- Depois da resposta do aluno, reconheça brevemente o conteúdo e continue a conversa com a próxima pergunta.
-- O diálogo precisa parecer humano e progressivo, com respostas de Grace entre 1 e 2 frases curtas.
-- Use o perfil profissional canônico somente quando o assunto do módulo permitir.
-- ${promptForSupport(support)}
+COMPORTAMENTO PEDAGÓGICO OBRIGATÓRIO:
+1. Grace fala 1 ou 2 frases curtas e faz UMA pergunta concreta.
+2. O aluno responde como Gustavo. Nunca peça para ele repetir a fala da Grace.
+3. Julgue o que ele REALMENTE respondeu, não se bate palavra por palavra com a sugestão.
+4. Primeiro avalie significado: foi possível entender o que ele quis dizer?
+5. Depois avalie apenas o erro gramatical/naturalidade MAIS importante daquele turno.
+6. Se a resposta estiver compreensível, continue o diálogo mesmo com pequenos erros.
+7. Use repeat_needed=true SOMENTE quando a resposta não for compreensível ou um erro impedir o sentido. Nesse caso, dê uma versão melhor e peça uma nova tentativa da RESPOSTA DELE, nunca da fala da Grace.
+8. correction deve conter o trecho que precisa mudar; better_answer deve mostrar uma versão natural completa. why explica em português em UMA frase curta.
+9. Não elogie automaticamente. feedback deve ser factual: "Entendi", "Ficou claro", "Quase; faltou..." etc.
+10. A próxima pergunta deve reagir ao conteúdo que Gustavo falou. Não siga um roteiro cego.
+11. Nos primeiros 30 dias, inglês A1: perguntas concretas, normalmente 4–10 palavras, uma ideia de cada vez. Evite perguntas vagas como "Tell me about yourself" sem apoio.
+12. Dias 1–30: priorize cotidiano e apresentação; trabalho entra aos poucos. Não transforme toda conversa em entrevista profissional.
+13. Cada sessão guiada deve durar cerca de 8–10 turnos. A partir do turno 8, quando fizer sentido, encerre naturalmente e marque session_complete=true.
+14. Se Gustavo responder em português ou misturar idiomas, entenda a intenção, mostre como dizer em inglês e continue sem constrangimento.
+15. Use apenas a dificuldade e objetivo do módulo atual. Não antecipe conteúdo avançado.
+16. ${supportInstruction(support)}
 
-Retorne SOMENTE JSON válido com estes campos:
+RETORNE SOMENTE JSON válido:
 {
-  "tutor":"fala da Grace em inglês terminando, quando adequado, com uma pergunta",
-  "tutor_translation":"tradução natural da fala da Grace em português",
-  "suggested_answer":"apoio visível conforme o nível",
-  "suggested_translation":"tradução/explicação da sugestão conforme o nível",
-  "hint":"dica conforme o nível",
-  "feedback":"feedback curtíssimo em português sobre a resposta anterior",
-  "correction":"uma correção curta ou string vazia",
+  "tutor":"próxima fala natural da Grace em inglês",
+  "tutor_translation":"tradução curta em português",
+  "suggested_answer":"apoio visível conforme a fase",
+  "suggested_translation":"tradução/intenção do apoio",
+  "hint":"dica conforme a fase",
+  "understood":true,
   "accepted":true,
+  "feedback":"avaliação factual e curta em português",
+  "correction":"trecho corrigido ou string vazia",
+  "better_answer":"versão natural completa ou string vazia",
+  "why":"explicação curtíssima em português ou string vazia",
+  "repeat_needed":false,
+  "focus":"micro-habilidade trabalhada neste turno",
+  "session_complete":false,
+  "summary":"resumo apenas quando a sessão terminar",
   "support":"${support}"
 }`;
 
   const user = {
     day,
+    turn,
     module: body.module || 'Módulo atual',
     level: body.level || 'A1',
     goal: body.goal || '',
@@ -109,7 +137,6 @@ Retorne SOMENTE JSON válido com estes campos:
     target_translation: body.translation || '',
     cue: body.cue || '',
     answer: String(body.answer || '').slice(0, 1200),
-    turn: Number(body.turn || 0),
     history,
     canonical_profile: GUSTAVO_PROFILE
   };
@@ -117,10 +144,7 @@ Retorne SOMENTE JSON válido com estes campos:
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model,
         messages: [
@@ -129,20 +153,20 @@ Retorne SOMENTE JSON válido com estes campos:
         ],
         response_format: { type: 'json_object' },
         reasoning_effort: 'low',
-        temperature: 0.35,
-        max_tokens: 650
+        temperature: 0.28,
+        max_tokens: 850
       })
     });
     const raw = await response.text();
     if (!response.ok) {
       console.error('Grace dialogue', response.status, raw.slice(0, 300));
-      return res.status(200).json(fallback(body));
+      return res.status(200).json(fallbackTurn(body));
     }
     const data = JSON.parse(raw);
     const parsed = parseJson(data.choices?.[0]?.message?.content || '');
-    return res.status(200).json({ ...fallback(body), ...parsed, support });
+    return res.status(200).json({ ...fallbackTurn(body), ...parsed, support });
   } catch (error) {
     console.error('Grace dialogue error', error?.name || 'unknown');
-    return res.status(200).json(fallback(body));
+    return res.status(200).json(fallbackTurn(body));
   }
 }
