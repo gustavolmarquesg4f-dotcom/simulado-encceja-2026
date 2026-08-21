@@ -31,7 +31,7 @@ window.fetch=async function(input,init={}){const url=typeof input==='string'?inp
   }
   const r=await nativeFetch(input,next);
   if(/\/api\/(?:dialogue|grace)(?:\?|$)/.test(url)){
-    try{const d=await r.clone().json(),body=JSON.stringify(deep(d)),h=new Headers(r.headers);h.set('content-type','application/json; charset=utf-8');return new Response(body,{status:r.status,statusText:r.statusText,headers:h})}catch{}
+    try{const d=await r.clone().json(),body=JSON.stringify(deep(d)),h=new Headers(r.headers);h.delete('content-length');h.delete('content-encoding');h.set('content-type','application/json; charset=utf-8');return new Response(body,{status:r.status,statusText:r.statusText,headers:h})}catch{}
   }
   return r;
 };
