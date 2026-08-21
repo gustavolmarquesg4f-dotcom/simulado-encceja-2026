@@ -14,8 +14,8 @@
   <main class="card">
     <div class="avatar">G</div>
     <div class="eyebrow">ENGLISHOS PRO • GRACE AI</div>
-    <h1>Vamos estudar inglês.</h1>
-    <p class="intro">Entre para acessar sua jornada de 180 dias com a Grace conectada à Groq.</p>
+    <h1>Vamos falar inglês.</h1>
+    <p class="intro">Entre para continuar seu treino de conversação com a Grace.</p>
     <form id="loginForm" autocomplete="on">
       <label class="label" for="password">Senha de acesso</label>
       <div class="password-row">
@@ -32,18 +32,11 @@
   <script>
     (()=>{
       'use strict';
-      const form=document.getElementById('loginForm');
-      const input=document.getElementById('password');
-      const button=document.getElementById('submitButton');
-      const error=document.getElementById('error');
-      const status=document.getElementById('status');
-      const dot=document.getElementById('dot');
-      const show=document.getElementById('showPassword');
-      let busy=false;
+      const form=document.getElementById('loginForm'),input=document.getElementById('password'),button=document.getElementById('submitButton'),error=document.getElementById('error'),status=document.getElementById('status'),dot=document.getElementById('dot'),show=document.getElementById('showPassword');let busy=false;
       if(location.hostname.endsWith('github.io')){location.replace('https://simulado-encceja-2026.vercel.app/englishos/');return;}
       input.disabled=false;input.readOnly=false;input.tabIndex=0;input.style.pointerEvents='auto';input.addEventListener('pointerdown',()=>input.focus());input.addEventListener('click',()=>input.focus());show.addEventListener('click',()=>{input.type=input.type==='password'?'text':'password';input.focus();});
-      async function health(){try{const r=await fetch('/api/health',{cache:'no-store',credentials:'include'});const d=await r.json();if(d.aiConfigured&&d.authConfigured){dot.classList.add('online');status.textContent=`Grace AI conectada • ${d.provider==='groq'?'Groq':'Online'}`;}else status.textContent='Grace disponível, mas a configuração está incompleta.';}catch{status.textContent='Verificação indisponível. O login ainda pode funcionar.';}}
-      form.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;const password=input.value;if(!password){error.textContent='Digite a senha.';input.focus();return;}busy=true;error.textContent='';button.disabled=true;button.textContent='Validando...';try{const r=await fetch('/api/auth',{method:'POST',credentials:'include',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(r.status===401?'Senha incorreta. Confira maiúsculas, minúsculas e o símbolo @.':(d.error||`Erro ${r.status} ao entrar.`));sessionStorage.setItem('englishos-access','granted');location.replace('./app.html?v=22');}catch(err){error.textContent=err.message||'Não foi possível entrar.';input.focus();input.select();}finally{busy=false;button.disabled=false;button.textContent='Entrar com a Grace';}});
+      async function health(){try{const r=await fetch('/api/health',{cache:'no-store',credentials:'include'}),d=await r.json();if(d.aiConfigured&&d.authConfigured){dot.classList.add('online');status.textContent=`Grace AI conectada • ${d.provider==='groq'?'Groq':'Online'}`;}else status.textContent='Grace disponível, mas a configuração está incompleta.';}catch{status.textContent='Verificação indisponível. O login ainda pode funcionar.';}}
+      form.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;const password=input.value;if(!password){error.textContent='Digite a senha.';input.focus();return;}busy=true;error.textContent='';button.disabled=true;button.textContent='Validando...';try{const r=await fetch('/api/auth',{method:'POST',credentials:'include',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})}),d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(r.status===401?'Senha incorreta. Confira maiúsculas, minúsculas e o símbolo @.':(d.error||`Erro ${r.status} ao entrar.`));sessionStorage.setItem('englishos-access','granted');location.replace('./app.html?v=23');}catch(err){error.textContent=err.message||'Não foi possível entrar.';input.focus();input.select();}finally{busy=false;button.disabled=false;button.textContent='Entrar com a Grace';}});
       health();setTimeout(()=>input.focus(),200);
     })();
   </script>
