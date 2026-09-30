@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#3446d3">
+<title>Ministério Atmosfera — Cadastro de Aniversariantes</title>
+<meta name="description" content="Cadastro de aniversariantes do Ministério Atmosfera.">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#687085;--accent:#3446d3;--accent2:#2637bd;--line:#dfe3ee;--ok:#16794c;--err:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef1fb 0,#f8f9fc 50%,#fff 100%);color:var(--text);min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 48px}
+.hero{text-align:center;padding:18px 8px 24px}
+.tag{display:inline-block;background:#e7eaff;color:#2736ad;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;letter-spacing:.3px}
+.hero h1{font-size:clamp(29px,5vw,44px);line-height:1.08;margin:16px 0 10px}
+.hero p{margin:0 auto;max-width:600px;color:var(--muted);font-size:16px;line-height:1.55}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:25px;box-shadow:0 18px 60px rgba(42,49,90,.09)}
+label{display:block;font-weight:700;font-size:14px;margin:0 0 8px}
+.field{margin-bottom:19px}
+input,select{width:100%;height:50px;border:1px solid #cfd5e4;border-radius:12px;padding:0 14px;font-size:16px;background:#fff;color:var(--text);outline:none}
+input:focus,select:focus{border-color:#6775e8;box-shadow:0 0 0 3px rgba(86,101,222,.12)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice button{height:48px;border:1px solid #cfd5e4;background:#fff;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;color:var(--text)}
+.choice button.active{background:#eef0ff;border-color:#6673e6;color:#2736ad}
+.group{display:none}.group.show{display:block}
+.submit{width:100%;height:54px;border:0;border-radius:14px;background:var(--accent);color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:3px}
+.submit:hover{background:var(--accent2)}.submit:disabled{opacity:.65;cursor:wait}
+.msg{display:none;margin-top:16px;padding:13px 14px;border-radius:12px;font-weight:700;font-size:14px}
+.msg.ok{display:block;background:#eaf8f1;color:var(--ok)}
+.msg.err{display:block;background:#fff0ef;color:var(--err)}
+.privacy{margin:16px 4px 0;text-align:center;color:var(--muted);font-size:12px;line-height:1.45}
+.hidden{position:absolute;left:-99999px;opacity:0;pointer-events:none}
+@media(max-width:560px){.card{padding:20px}.grid{grid-template-columns:1fr}.wrap{padding:18px 12px 38px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span class="tag">MINISTÉRIO ATMOSFERA</span>
+    <h1>Cadastro de Aniversariantes</h1>
+    <p>Queremos celebrar a vida de cada irmão. Preencha seus dados para fazer parte da nossa lista de aniversariantes.</p>
+  </div>
+  <form class="card" id="form">
+    <div class="field"><label for="nome">Nome completo</label><input id="nome" autocomplete="name" required maxlength="120" placeholder="Digite seu nome completo"></div>
+    <div class="field"><label>Dia e mês do aniversário</label><div class="grid"><select id="dia" required><option value="">Dia</option></select><select id="mes" required><option value="">Mês</option></select></div></div>
+    <div class="field"><label for="telefone">Telefone / WhatsApp</label><input id="telefone" inputmode="tel" autocomplete="tel" required maxlength="20" placeholder="(61) 99999-9999"></div>
+    <div class="field"><label>Você é voluntário(a) no Atmosfera?</label><div class="choice"><button type="button" id="sim">Sim</button><button type="button" id="nao">Não</button></div></div>
+    <div class="field group" id="grupoBox"><label for="grupo">Em qual grupo/equipe você serve?</label><input id="grupo" maxlength="180" placeholder="Ex.: Recepção, Intercessão"></div>
+    <div class="hidden"><label>Website<input id="website" tabindex="-1" autocomplete="off"></label></div>
+    <button class="submit" id="submit" type="submit">Enviar cadastro</button>
+    <div class="msg" id="msg"></div>
+    <p class="privacy">Seus dados serão usados apenas para organização e comunicação do Ministério Atmosfera.</p>
+  </form>
+</div>
+<script>
+const ENDPOINT='https://wscvdtrmplqokceaztrv.supabase.co/functions/v1/cadastrar-aniversariante';
+const dias=document.getElementById('dia'), meses=document.getElementById('mes');
+for(let d=1;d<=31;d++)dias.insertAdjacentHTML('beforeend','<option value="'+d+'">'+d+'</option>');
+['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].forEach((m,i)=>meses.insertAdjacentHTML('beforeend','<option value="'+(i+1)+'">'+m+'</option>'));
+function ajustarDias(){const m=Number(meses.value);const max=[31,29,31,30,31,30,31,31,30,31,30,31][m-1]||31;[...dias.options].forEach((o,i)=>{if(i>0)o.disabled=Number(o.value)>max});if(Number(dias.value)>max)dias.value=''}
+meses.addEventListener('change',ajustarDias);
+let voluntario=null;
+const sim=document.getElementById('sim'),nao=document.getElementById('nao'),box=document.getElementById('grupoBox'),grupo=document.getElementById('grupo');
+function pick(v){voluntario=v;sim.classList.toggle('active',v===true);nao.classList.toggle('active',v===false);box.classList.toggle('show',v===true);grupo.required=v===true;if(!v)grupo.value=''}
+sim.onclick=()=>pick(true);nao.onclick=()=>pick(false);
+const tel=document.getElementById('telefone');
+tel.addEventListener('input',()=>{let v=tel.value.replace(/\D/g,'').slice(0,11);if(v.length>10)v=v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');else if(v.length>6)v=v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');else if(v.length>2)v=v.replace(/(\d{2})(\d+)/,'($1) $2');else if(v.length)v='('+v;tel.value=v});
+const form=document.getElementById('form'),msg=document.getElementById('msg'),submit=document.getElementById('submit');
+form.addEventListener('submit',async e=>{
+  e.preventDefault();msg.className='msg';msg.textContent='';
+  if(document.getElementById('website').value)return;
+  if(voluntario===null){msg.className='msg err';msg.textContent='Informe se você é voluntário(a) no Atmosfera.';return}
+  const grupos=voluntario?grupo.value.split(',').map(x=>x.trim()).filter(Boolean):[];
+  submit.disabled=true;submit.textContent='Enviando...';
+  try{
+    const res=await fetch(ENDPOINT,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({nome:document.getElementById('nome').value,dia:Number(dias.value),mes:Number(meses.value),telefone_whatsapp:tel.value,voluntario,grupos})});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error(data.error||'erro');
+    msg.className='msg ok';msg.textContent='Cadastro enviado com sucesso! Obrigado.';
+    form.reset();voluntario=null;sim.classList.remove('active');nao.classList.remove('active');box.classList.remove('show');
+  }catch(err){console.error(err);msg.className='msg err';msg.textContent='Não foi possível enviar agora. Tente novamente.'}
+  finally{submit.disabled=false;submit.textContent='Enviar cadastro'}
+});
+</script>
+</body>
+</html>
