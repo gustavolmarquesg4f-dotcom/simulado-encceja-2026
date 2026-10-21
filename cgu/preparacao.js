@@ -211,8 +211,8 @@ function renderP4(){
  if(!v.done){liveTimer=setInterval(()=>{const x=discDuration-(Date.now()-state.essay.startedAt);const t=document.getElementById("cguEssayClock");if(x<=0){clearInterval(liveTimer);state.essay.done=true;save();renderP4()}else if(t)t.textContent=dt(x)},1000)}
 }
 function act(n){
- if(n==="open-list"){renderList(data);return}
- if(n==="open-sim"){renderSim(data);return}
+ if(n==="open-list"){if(window.CGU_APP_GO)return window.CGU_APP_GO("lista");renderList(data);return}
+ if(n==="open-sim"){if(window.CGU_APP_GO)return window.CGU_APP_GO("simulado-cgu");renderSim(data);return}
  if(n==="start-sim"){newSim();return}
  if(n==="prev-page"){filters.page=Math.max(1,filters.page-1);refreshList();return}
  if(n==="next-page"){filters.page++;refreshList();return}
