@@ -69,7 +69,7 @@ let currentPage="lista",data=null,bank=[],map=new Map(),liveTimer=null,printing=
 let filters={part:"ALL",answer:"ALL",progress:"ALL",source:"ALL",search:"",perPage:25,page:1};
 let reviewMode="wrong";
 let state;try{state=JSON.parse(localStorage.getItem(STORE_KEY)||"{}")}catch{state={}};
-state={memorized:{},sim:null,essay:null,...state};
+state={memorized:{},sim:null,essay:null,history:[],...state};
 const save=()=>{try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){console.warn("Não foi possível salvar",e)}};
 function initialize(d){
  if(data===d&&bank.length)return;
@@ -143,7 +143,7 @@ function remainingMs(){return !state.sim?duration:duration-(Date.now()-state.sim
 function getParts(){const sim=state.sim,result={P1:0,P2:0,P3:0,total:0,correct:0,incorrect:0,blanks:0};if(!sim)return result;
  for(const id of sim.ids){const q=map.get(id);if(!q)continue;let a=sim.answers[id]||"B";let pts=a==="B"?0:a===q.answer?weight(q.p):-weight(q.p);result[q.p]+=pts;result.total+=pts;if(a==="B")result.blanks++;else if(a===q.answer)result.correct++;else result.incorrect++}
  return result;}
-function finishSim(automatic=false){const s=state.sim;if(!s||s.submitted)return;if(!automatic&&!confirm("Entregar o simulado e revelar as respostas? Você não poderá mudar suas marcações."))return;s.submitted=true;s.finishedAt=Date.now();s.automatic=automatic;save();renderSim(data)}
+function finishSim(automatic=false){const s=state.sim;if(!s||s.submitted)return;if(!automatic&&!confirm("Entregar o simulado e revelar as respostas? Você não poderá mudar suas marcações."))return;s.submitted=true;s.finishedAt=Date.now();s.automatic=automatic;const points=getParts();state.history=[{at:s.finishedAt,points:points.total,p1:points.P1,p2:points.P2,p3:points.P3,right:points.correct,wrong:points.incorrect,blanks:points.blanks},...(state.history||[])].slice(0,15);save();renderSim(data)}
 function renderSim(d){
  initialize(d);currentPage="simulado";clearInterval(liveTimer);
  const s=state.sim;
@@ -154,6 +154,7 @@ function renderSim(d){
  <div class="cgu-grid"><div class="cgu-metric"><b>40</b><span>P1 · peso 1 · mínimo 8</span></div><div class="cgu-metric"><b>40</b><span>P2 · peso 1 · mínimo 12</span></div><div class="cgu-metric"><b>90</b><span>P3 · peso 2 · mínimo 54</span></div></div>
  <div class="cgu-panel"><h3>Objetiva — 5 horas</h3><p>Marque CERTO, ERRADO ou EM BRANCO. Acerto: +1 (P1/P2) ou +2 (P3); erro: −1 (P1/P2) ou −2 (P3); branco: zero. Máximo: 260 pontos.</p>
  <p><b>Critérios mínimos:</b> P1 ≥ 8, P2 ≥ 12, P3 ≥ 54 e total ≥ 78. Esses são requisitos de eliminação, não a pontuação para ser classificado entre as vagas.</p></div>
+ ${(state.history||[]).length?'<div class="cgu-panel"><h3>Seus simulados anteriores</h3><div class="cgu-list">'+state.history.slice(0,5).map((h,i)=>'<div class="cgu-item"><b>Simulado '+(state.history.length-i)+'</b> · '+new Date(h.at).toLocaleDateString('pt-BR')+'<div class="cgu-a"><b>'+h.points+' / 260 pontos</b> · P1 '+h.p1+' · P2 '+h.p2+' · P3 '+h.p3+'</div><span class="cgu-muted">'+h.right+' certas · '+h.wrong+' erradas · '+h.blanks+' brancos</span></div>').join('')+'</div></div>':''}
  <div class="cgu-panel"><h3>Discursiva — 3h30</h3><p>Depois da objetiva, pratique 1 questão de conhecimentos complementares (até 30 linhas, 30 pontos) e 1 situação-problema de Infraestrutura (até 60 linhas, 70 pontos). A redação não recebe nota automática fictícia.</p></div>
  <div class="cgu-panel"><b>Nota de transparência:</b> o formato segue o edital, mas as questões são <b>autorais</b> e parte foi retirada de banco anterior ainda em revisão. Não é uma prova oficial inédita do Cebraspe, nem medição confiável de sua classificação.</div>`;return;}
  if(!s.submitted&&remainingMs()<=0){finishSim(true);return}
